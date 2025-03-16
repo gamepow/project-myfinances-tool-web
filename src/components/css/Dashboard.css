@@ -25,3 +25,23 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .dashboardPage main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f9ff;
+  }
+  
+  .dashboardPage main div {
+    text-align: center;
+  }
+  
+  .dashboardPage main h2 {
+    color: #1e3a8a;
+  }
+  
+  .dashboardPage main p {
+    color: #4b5563;
+  }

@@ -2,6 +2,7 @@ import React from 'react';
 import { useUser } from '../context/UserContext';
 import { useNavigation } from '../context/NavigationContext';
 import '../components/css/Main.css';
+import '../components/css/Dashboard.css';
 
 function Dashboard(){
     const { user, logout } = useUser();
@@ -10,7 +11,7 @@ function Dashboard(){
     
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/');
     };
 
     const handleLoginPage = () => {
@@ -41,7 +42,7 @@ function Dashboard(){
 
         <div className="dashboardPage">
             <header>
-                <h1>Welcome to your dashboard.</h1>
+                <h1>Welcome to your dashboard</h1>
                 <button onClick={handleLogout}>Logout</button>
             </header>
             <main>
