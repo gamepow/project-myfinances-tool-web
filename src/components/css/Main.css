@@ -46,6 +46,15 @@
   color: #4b5563;
 }
 
+.landingPage main button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .landingPage footer {
   padding: 10px;
   text-align: center;

@@ -2,43 +2,21 @@ import '../components/css/Login.css';
 import '../components/css/Main.css';
 import { useNavigation } from '../context/NavigationContext';
 import React, { useState } from 'react';
+import { useUser } from '../context/UserContext';
 
 function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const { login, loading, error } = useUser();
+  const navigate =useNavigation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        
-        const data = await response.json();
-        // Store the JWT token in local storage or cookies
-        localStorage.setItem('token', data.token);
-        alert("Login Exitoso!");
-        // TODO: add redirect to home page
-        // window.location.href = '/main';
-
-      } else {
-        const errorMessage = await response.text();
-        setError(errorMessage);
-      }
-    } catch (error) {
-      setError("An error occurred during login: " + error);
+    await login(username, password);
+    if(!error){
+      navigate('/dashboard');
     }
   };
-
-  const navigate =useNavigation();
 
   const handleHomePage = () => {
       navigate('/')
@@ -71,9 +49,11 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login' }
+          </button>
         </form>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
       </div>
       <footer>
           <p>&copy; {new Date().getFullYear()} My Project Admin</p>
