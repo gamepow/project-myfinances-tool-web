@@ -1,4 +1,6 @@
-//import './components/css/Login.css';
+import '../components/css/Login.css';
+import '../components/css/Main.css';
+import { useNavigation } from '../context/NavigationContext';
 import React, { useState } from 'react';
 
 function Login() {
@@ -36,31 +38,46 @@ function Login() {
     }
   };
 
+  const navigate =useNavigation();
+
+  const handleHomePage = () => {
+      navigate('/')
+  }
+
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <br />
-        <button type="submit">Login</button>
-      </form>
+    <div className="landingPage">
+      <header>
+          <h1>My Project Administrator</h1>
+          <button onClick={handleHomePage}>Home</button>
+      </header>
+      <div className="login-container">
+        <h2>Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
+      <footer>
+          <p>&copy; {new Date().getFullYear()} My Project Admin</p>
+      </footer>
     </div>
   );
 

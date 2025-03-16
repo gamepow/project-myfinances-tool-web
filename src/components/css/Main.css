@@ -1,3 +1,53 @@
-.Login {
-    text-align: center;
-  }
+.landingPage {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landingPage header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #e0f2fe;
+}
+
+.landingPage header h1 {
+  margin: 0;
+  color: #1e3a8a;
+}
+
+.landingPage header button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.landingPage main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f9ff;
+}
+
+.landingPage main div {
+  text-align: center;
+}
+
+.landingPage main h2 {
+  color: #1e3a8a;
+}
+
+.landingPage main p {
+  color: #4b5563;
+}
+
+.landingPage footer {
+  padding: 10px;
+  text-align: center;
+  background-color: #e0f2fe;
+}
