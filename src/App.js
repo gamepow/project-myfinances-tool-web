@@ -17,17 +17,19 @@ function App() {
         <UserProvider>
           <NavigationProvider>
             <Topbar />
-            <Routes>
-              <Route path="/" element={<Landingpage />} />
-              <Route path="/login" element={<Loginpage />} />
-              <Route path="/dashboard" element=
-                {
-                  <ProtectedRoute>
-                    <Dashboardpage />
-                  </ProtectedRoute> 
-                }  
-              />
-            </Routes>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 120px)' }}>
+              <Routes>
+                <Route path="/" element={<Landingpage />} />
+                <Route path="/login" element={<Loginpage />} />
+                <Route path="/dashboard" element=
+                  {
+                    <ProtectedRoute>
+                      <Dashboardpage />
+                    </ProtectedRoute> 
+                  }  
+                />
+              </Routes>
+            </div>
             <Footer />
           </NavigationProvider>
         </UserProvider>

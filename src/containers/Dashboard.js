@@ -64,10 +64,6 @@ function Dashboard(){
     return (
 
         <div className="dashboardPage">
-            <header>
-                <h1>Welcome to your Dashboard</h1>
-                <button onClick={handleLogout}>Logout</button>
-            </header>
             <div className='dashboardContainer'>
                 <aside className="dashboardMenu">
                     <ul>
@@ -110,9 +106,6 @@ function Dashboard(){
                 </main>
                 </div>
             </div>
-            <footer>
-                <p>&copy; {new Date().getFullYear()} My Project Admin</p>
-            </footer>
         </div>
     );
 }

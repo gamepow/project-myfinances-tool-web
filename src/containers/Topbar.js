@@ -1,7 +1,8 @@
 import React from 'react';
-import '../components/css/Main.css';
+import '../components/css/Topbar.css';
 import { useNavigation } from '../context/NavigationContext';
 import { alpha, styled } from '@mui/material/styles';
+import { useUser } from '../context/UserContext';
 import AppBar from '@mui/material/AppBar';
 import Container  from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -10,6 +11,7 @@ import Button from '@mui/material/Button';
 
 function Topbar(){
     const navigate = useNavigation();
+    const { user, logout } = useUser();
 
     const handleSigninPage = () => {
         navigate('/login');
@@ -17,6 +19,11 @@ function Topbar(){
 
     const handleSignupPage = () => {
         navigate('/signup');
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
     };
 
     const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -48,15 +55,23 @@ function Topbar(){
             <Container maxWidth="lg">
                 <StyledToolbar>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <h1>My Project Administrator</h1>
+                        <h1>Plan your Project</h1>
                     </Box>
                     <Box sx={{
                         display: { xs: 'none', md: 'flex' },
                         gap: 1,
                         alignItems: 'center',
                     }}>
-                        <Button color="primary" variant="contained" size="medium" onClick={handleSigninPage}>Sign in</Button>
-                        <Button color="primary" variant="outlined" size="medium" onClick={handleSignupPage}>Sign up</Button>
+                        {user ? (
+                            <>
+                                <Button color="primary" variant="outlined" size="medium" onClick={handleLogout}>Log out</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button color="primary" variant="contained" size="medium" onClick={handleSigninPage}>Sign in</Button>
+                                <Button color="primary" variant="outlined" size="medium" onClick={handleSignupPage}>Sign up</Button>
+                            </>
+                        )}                        
                     </Box>
                 </StyledToolbar>
             </Container>
