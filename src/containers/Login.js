@@ -37,8 +37,6 @@ function Login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    console.log('username: ' + username);
-
     await login(username, password);
     if(!error){
       navigate('/dashboard');
