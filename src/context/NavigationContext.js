@@ -7,7 +7,9 @@ export const NavigationProvider = ({ children }) => {
     const navigate = useNavigate();
 
     return(
-        <NavigationContext.Provider value={navigate}>{children}</NavigationContext.Provider>
+        <NavigationContext.Provider value={navigate}>
+            {children}
+        </NavigationContext.Provider>
     );
 };
 

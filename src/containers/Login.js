@@ -30,10 +30,6 @@ function Login() {
 
   return (
     <div className="landingPage">
-      <header>
-          <h1>My Project Administrator</h1>
-          <button onClick={handleHomePage}>Home</button>
-      </header>
       <div className="login-container">
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
@@ -61,9 +57,6 @@ function Login() {
         </form>
         {error && <p className="error-message">{error}</p>}
       </div>
-      <footer>
-          <p>&copy; {new Date().getFullYear()} My Project Admin</p>
-      </footer>
     </div>
   );
 
