@@ -15,20 +15,22 @@ export const UserProvider = ({ children }) => {
         }
     }, [user]);
 
-    const login = async (userName, password) => {
+    const login = async (username, password) => {
         setLoading(true);
         setError(null);
         try{
-            const userData = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userName, password }),
+                body: JSON.stringify({ username, password }),
             });
-            if(!userData.ok){
+            
+            if(!response.ok){
                 throw new Error('Invalid credentials');
             }
+            const userData = await response.json();
             setUser(userData);
             setLoading(false);
         } catch(err){

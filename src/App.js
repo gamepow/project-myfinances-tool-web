@@ -6,6 +6,7 @@ import { NavigationProvider } from './context/NavigationContext';
 import Landingpage from './containers/LandingPage';
 import Loginpage from './containers/Login';
 import Dashboardpage from './containers/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -15,7 +16,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Landingpage />} />
             <Route path="/login" element={<Loginpage />} />
-            <Route path="/dashboard" element={<Dashboardpage />} />
+            <Route path="/dashboard" element=
+              {
+                <ProtectedRoute>
+                  <Dashboardpage />
+                </ProtectedRoute> 
+              }  
+            />
           </Routes>
         </NavigationProvider>
       </UserProvider>

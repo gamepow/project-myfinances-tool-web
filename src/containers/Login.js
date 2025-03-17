@@ -1,22 +1,28 @@
 import '../components/css/Login.css';
 import '../components/css/Main.css';
 import { useNavigation } from '../context/NavigationContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext';
 
 function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const { login, loading, error } = useUser();
+  const { login, loading, error, user } = useUser();
   const navigate =useNavigation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     await login(username, password);
-    if(!error){
+    /*if(!error){
+      navigate('/dashboard');
+    }*/
+  };
+
+  useEffect(() => {
+    if (user && !error) {
       navigate('/dashboard');
     }
-  };
+  }, [user, error, navigate]);
 
   const handleHomePage = () => {
       navigate('/')
