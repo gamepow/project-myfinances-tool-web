@@ -5,7 +5,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
 
     const login = async (username, password) => {
         setLoading(true);
-        setError(null);
+        setError(false);
         try{
             const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
@@ -28,13 +28,14 @@ export const UserProvider = ({ children }) => {
             });
             
             if(!response.ok){
+                setError(true);
                 throw new Error('Invalid credentials');
             }
             const userData = await response.json();
             setUser(userData);
             setLoading(false);
         } catch(err){
-            setError(err.message);
+            setError(true);
             setLoading(false);
         }
     };

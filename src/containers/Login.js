@@ -14,6 +14,7 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
+import CircularProgress from '@mui/material/CircularProgress';
 import { alpha, styled } from '@mui/material/styles';
 
 function Login() {
@@ -27,6 +28,9 @@ function Login() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
 
+  const [success, setSuccess] = React.useState(false);
+  const timer = React.useRef(undefined);
+
   const handleLogin = async (e) => {
 
     if (userNameError || passwordError) {
@@ -38,6 +42,7 @@ function Login() {
     const password = document.getElementById('password').value;
 
     await login(username, password);
+
     if(!error){
       navigate('/dashboard');
     }else{
@@ -146,7 +151,7 @@ function Login() {
         >
           <FormControl sx={{ padding: '20px' }}>
             <Collapse in={open}>
-              <Alert severity="error"
+              <Alert severity="error" variant="filled" sx={{ mb: 2 }}
               action={
                 <IconButton
                   aria-label="close"
@@ -161,13 +166,25 @@ function Login() {
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
-              >Ingreso fallido, intente de nuevo.</Alert>
+              >Failed attemp.</Alert>
             </Collapse>
-            <StyledFormLabel htmlFor="username">Nombre de Usuario</StyledFormLabel>
-            <StyledTextField id="username" name="username" variant="outlined" type="text" error={userNameError} helperText={userNameErrorMessage} required></StyledTextField>
-            <StyledFormLabel htmlFor="password">Contraseña</StyledFormLabel>
-            <StyledTextField id="password" name="password" variant="outlined" type="password" error={passwordError} helperText={passwordErrorMessage} required></StyledTextField>
-            <Button type="submit" variant="contained" onClick={validateInputs} size="large">Sign In</Button>
+            <StyledTextField id="username" name="username" variant="outlined" type="text" label="Username" error={userNameError} helperText={userNameErrorMessage} required></StyledTextField>
+            <StyledTextField id="password" name="password" variant="outlined" type="password" label="Password" error={passwordError} helperText={passwordErrorMessage} required></StyledTextField>
+            <Box>
+              <Button type="submit" variant="contained" onClick={validateInputs} size="large" disabled={loading}>Sign in</Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                  }}
+                />
+              )}
+          </Box>
           </FormControl>
         </Box>
       </Card>

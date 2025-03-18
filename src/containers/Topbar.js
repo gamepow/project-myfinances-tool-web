@@ -8,6 +8,7 @@ import Container  from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 function Topbar(){
     const navigate = useNavigation();
@@ -33,7 +34,7 @@ function Topbar(){
         flexShrink: 0,
         borderRadius: `calc(${theme.shape.borderRadius}px + 8px)`,
         backdropFilter: 'blur(24px)',
-        border: '1px solid',
+        border: '1.5px solid',
         borderColor: (theme.vars || theme).palette.divider,
         backgroundColor: theme.vars
           ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
@@ -55,7 +56,7 @@ function Topbar(){
             <Container maxWidth="lg">
                 <StyledToolbar>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <h1>Plan your Project</h1>
+                        <Typography variant="h4" color="primary">Plan my Project</Typography>
                     </Box>
                     <Box sx={{
                         display: { xs: 'none', md: 'flex' },
@@ -64,12 +65,12 @@ function Topbar(){
                     }}>
                         {user ? (
                             <>
-                                <Button color="primary" variant="outlined" size="medium" onClick={handleLogout}>Log out</Button>
+                                <Button color="primary" variant="outlined" size="medium" onClick={handleLogout}>Sign out</Button>
                             </>
                         ) : (
                             <>
-                                <Button color="primary" variant="contained" size="medium" onClick={handleSigninPage}>Sign in</Button>
-                                <Button color="primary" variant="outlined" size="medium" onClick={handleSignupPage}>Sign up</Button>
+                                <Button color="primary" variant="contained" size="medium" onClick={handleSigninPage}>Sign In</Button>
+                                <Button color="primary" variant="outlined" size="medium" onClick={handleSignupPage}>New user</Button>
                             </>
                         )}                        
                     </Box>
