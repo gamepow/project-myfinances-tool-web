@@ -1,5 +1,6 @@
 import React from 'react';
 import '../components/css/Main.css';
+import Typography from '@mui/material/Typography';
 
 function LandingPage(){
 
@@ -8,8 +9,12 @@ function LandingPage(){
         <div className="landingPage">
             <main>
                 <div>
-                    <h2> Manage your project with ease</h2>
-                    <p>Workflow, task management and more...</p>
+                    <Typography color="primary" variant="h4" gutterBottom>
+                        Manage your project with ease
+                    </Typography>
+                    <Typography color="primary" variant="body1" gutterBottom>
+                        Workflow, task management and more...
+                    </Typography>
                 </div>
             </main>
         </div>

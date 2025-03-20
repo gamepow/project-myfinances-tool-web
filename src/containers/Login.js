@@ -105,7 +105,7 @@ function Login() {
   }));
 
   const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: 'calc((1 - var(--template-frame-height, 0)) * 90dvh)',
+    height: 'calc((1 - var(--template-frame-height, 0)) * 80dvh)',
     minHeight: '100%',
     padding: theme.spacing(10),
     [theme.breakpoints.up('sm')]: {

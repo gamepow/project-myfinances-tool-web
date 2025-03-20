@@ -4,6 +4,7 @@ import { useNavigation } from '../context/NavigationContext';
 import { useLocation } from 'react-router-dom';
 import '../components/css/Main.css';
 import '../components/css/Dashboard.css';
+import Stack from '@mui/material/Stack';
 
 function Dashboard(){
     const { logout } = useUser();
@@ -62,51 +63,9 @@ function Dashboard(){
       };
 
     return (
+        <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between'}} >
 
-        <div className="dashboardPage">
-            <div className='dashboardContainer'>
-                <aside className="dashboardMenu">
-                    <ul>
-                        <li onClick={() => handleMenuClick('/dashboard')}
-                            className={location.pathname === '/dashboard' ? 'active' : ''}
-                        > Dashboard</li>
-                        <li
-                            onClick={() => handleMenuClick('/projects')}
-                            className={location.pathname === '/projects' ? 'active' : ''}
-                        > Projects</li>
-                        <li onClick={() => handleMenuClick('/tasks')}
-                            className={location.pathname === '/tasks' ? 'active' : ''}
-                        >Tasks</li>
-                        <li onClick={() => handleMenuClick('/teams')}
-                            className={location.pathname === '/teams' ? 'active' : ''}
-                        >Teams</li>
-                        <li onClick={() => handleMenuClick('/reports')}
-                            className={location.pathname === '/reports' ? 'active' : ''}
-                        >Reports</li>
-                    </ul>
-                </aside>
-                <div className="dashboardContent">
-                <main>
-                    <h3>Upcoming Tasks</h3>
-                    <table>
-                        <tbody>
-                            {tasks.map((task, index) => (
-                            <tr key={index}>
-                                <td className="task-cell"
-                                    style={{ backgroundColor: getTaskColor(task.dueDate) }}>
-                                    <div className="task-title">{task.title}</div>
-                                    <div className="task-description">{task.description}</div>
-                                    <div className="task-due-date">Due: {task.dueDate}</div>
-                                    <div className="task-status">Status: {task.status}</div>
-                                </td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </main>
-                </div>
-            </div>
-        </div>
+        </Stack>
     );
 }
 
