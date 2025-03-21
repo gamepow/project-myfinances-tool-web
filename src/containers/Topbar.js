@@ -20,6 +20,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Stack from '@mui/material/Stack';
 
 function Topbar(){
     const navigate = useNavigation();
@@ -118,7 +119,7 @@ function Topbar(){
                         <div></div>
                     )}
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <Typography variant="h4">Plan my Project</Typography>
+                        <Typography variant="h4">My Finances</Typography>
                     </Box>
                     <Box>
                         {user ? (
@@ -147,8 +148,10 @@ function Topbar(){
                             </>
                         ) : (
                             <>
-                                <Button variant="contained" size="medium" onClick={handleSigninPage}>Sign In</Button>
-                                <Button color="white" variant="outlined" size="medium" onClick={handleSignupPage}>New user</Button>
+                                <Stack direction="row" spacing={1}>
+                                    <Button variant="contained" size="medium" onClick={handleSigninPage} >Sign In</Button>
+                                    <Button color="white" variant="outlined" size="medium" onClick={handleSignupPage}>New user</Button>
+                                </Stack>
                             </>
                         )}                        
                     </Box>

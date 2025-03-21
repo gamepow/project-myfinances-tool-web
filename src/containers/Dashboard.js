@@ -4,68 +4,69 @@ import { useNavigation } from '../context/NavigationContext';
 import { useLocation } from 'react-router-dom';
 import '../components/css/Main.css';
 import '../components/css/Dashboard.css';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { Typography } from '@mui/material';
 
 function Dashboard(){
     const { logout } = useUser();
     const navigate = useNavigation();
     const location = useLocation(); // Get current location
-    
-    const handleLogout = () => {
-        logout();
-        navigate('/');
-    };
 
-    const handleMenuClick = (route) => {
-        navigate(route);
+    const handleAddExpense = () =>{
+
     }
 
-    // TODO: Delete this placeholder once DB is connected
-    const tasks = [
-        {
-        title: 'Design Mockups',
-        description: 'Create mockups for the new landing page.',
-        dueDate: '2025-03-08',
-        status: 'In Progress',
-        },
-        {
-        title: 'Backend API Integration',
-        description: 'Integrate the backend API with the frontend.',
-        dueDate: '2025-03-15',
-        status: 'Pending',
-        },
-        {
-        title: 'Testing and Debugging',
-        description: 'Perform thorough testing and debugging.',
-        dueDate: '2025-03-14',
-        status: 'In Progress',
-        },
+    // TODO change this with a DB select
+    const customData = [
+      { id: 0, value: 15, label: 'Apples'},
+      { id: 1, value: 25, label: 'Bananas'},
+      { id: 2, value: 20, label: 'Cherries'},
+      { id: 3, value: 35, label: 'Dates'},
+      { id: 5, value: 10, label: 'Lemon'},
+      { id: 6, value: 5, label: 'Watermelon'},
+      { id: 7, value: 30, label: 'Pineaple'},
     ];
 
-    const getTaskColor = (dueDate) => {
-        const today = new Date();
-        const due = new Date(dueDate);
-        const diffTime = today - due;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        console.log(today);
-        console.log(diffDays);
-    
-        if (diffDays > 5) {
-          return 'green';
-        } else if (diffDays >= 3 && diffDays <= 5) {
-          return 'yellow';
-        } else if (diffDays < 3) {
-          return 'red';
-        } else {
-          return 'gray';
-        }
-      };
+    function CustomPieChart({ data }) {
+      return (
+        <Container>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center', // Horizontal centering
+            alignItems: 'center', // Vertical centering
+            height: '60vh', // Ensures the box is separate from the top bar
+            gap: 4
+          }}>
+            <Typography variant="h4" sx={{ mt: 4 }}>March 2025</Typography> {/* Add top margin */}
+            <PieChart
+              colors={['#50881f','#6f8400','#8c7d00','#a97300','#c56400','#de511a','#f2363d','#ff0761']}
+              series={[
+                {
+                  data: data,
+                  arcLabel: (item) => item.label,
+                  arcLabelMinAngle: 35,
+                  arcLabelRadius: '60%',
+                  highlightScope: { fade: 'global', highlight: 'item' },
+                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                },
+              ]}
+              width={550}
+              height={350}
+            />
+            <Button variant="contained" size="large" onClick={handleAddExpense} >Add Expense</Button>
+          </Box>
+        </Container>
+      );
+    }
 
     return (
-        <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between'}} >
-
-        </Stack>
+      <Box>
+        <CustomPieChart data = {customData}/>
+      </Box>
     );
 }
 

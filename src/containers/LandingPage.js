@@ -10,10 +10,10 @@ function LandingPage(){
             <main>
                 <div>
                     <Typography color="primary" variant="h4" gutterBottom>
-                        Manage your project with ease
+                        Manage your finances with ease
                     </Typography>
                     <Typography color="primary" variant="body1" gutterBottom>
-                        Workflow, task management and more...
+                        Add expenses, handle your budget, create new categories, customize to your style...
                     </Typography>
                 </div>
             </main>
