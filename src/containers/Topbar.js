@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import HomeRoundedIcon from '@mui/icons-material/Home';
-import AssignmentRoundedIcon from '@mui/icons-material/Task';
+import ReceiptRoundedIcon from '@mui/icons-material/Receipt';
 import ProfileIcon from '@mui/icons-material/Person';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LogOutIcon from '@mui/icons-material/Logout';
@@ -79,7 +79,7 @@ function Topbar(){
 
     const mainListItems = [
     { text: 'Home', icon: <HomeRoundedIcon /> , url:'/dashboard'},
-    { text: 'Tasks', icon: <AssignmentRoundedIcon />, url:'/tasks' }
+    { text: 'Transactions', icon: <ReceiptRoundedIcon />, url:'/Transactions' }
     ];
 
     const profileListItems = [
