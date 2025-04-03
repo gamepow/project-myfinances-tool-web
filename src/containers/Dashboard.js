@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,19 +15,40 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LineAxisOutlined } from '@mui/icons-material';
 
 function Dashboard(){
-    const { logout } = useUser();
+    const { user } = useUser();
     const navigate = useNavigation();
     const location = useLocation(); // Get current location
     // State variables for form inputs
     const [transactionType, setTransactionType] = useState('');
     const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]); // State to store categories
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [transactionDate, setTransactionDate] = useState(dayjs());
 
     const [openDialog, setOpenDialog] = useState(false); // State to control the popup
+
+    //Fetch Categories from the API
+    useEffect(() =>{
+
+      console.log('User:', user); // Debugging user object
+
+      const fetchCategories = async () => {
+        try{
+          const response = await axios.get(`/api/category/${user.id}`); // Pass the user id to the endpoint
+          setCategories(response.data); // Update the categories state with the fetched data
+        } catch(error) {
+          console.error('Error fetching categories: ', error);
+        }
+      };
+
+      if (user?.id) {
+        fetchCategories(); // Fetch categories only if the user ID is available
+      }
+    }, [user]);
 
     const handleAddTransaction = () =>{
       setOpenDialog(true);
@@ -136,14 +158,13 @@ function Dashboard(){
                   id="category"
                   value={category}
                   label="Category"
-                  onChange={(event) =>{
-                    event.stopPropagation();
-                    handleCategory(event);
-                  }}
+                  onChange={(event) => setCategory(event.target.value)}
                 >
-                  <MenuItem value=""><em>None</em></MenuItem>
-                  <MenuItem value="Supermarket">Supermarket</MenuItem>
-                  <MenuItem value="Restaurants">Restaurants</MenuItem>
+                  {categories.map((cat) => (
+                    <MenuItem key={cat.categoryId} value={cat.categoryId}>
+                      {cat.categoryName}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <TextField
