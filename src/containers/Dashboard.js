@@ -15,10 +15,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LineAxisOutlined } from '@mui/icons-material';
+import { CategoryRounded, LineAxisOutlined } from '@mui/icons-material';
 
 function Dashboard(){
-    const { user } = useUser();
+    const { user, fetchWithAuth } = useUser();
     const navigate = useNavigation();
     const location = useLocation(); // Get current location
     // State variables for form inputs
@@ -38,7 +38,8 @@ function Dashboard(){
 
       const fetchCategories = async () => {
         try{
-          const response = await axios.get(`/api/category/${user.id}`); // Pass the user id to the endpoint
+          const response = await fetchWithAuth(`/api/category/${user.id}`); // Pass the user id to the endpoint
+          console.log(categories); // Debugging categories response
           setCategories(response.data); // Update the categories state with the fetched data
         } catch(error) {
           console.error('Error fetching categories: ', error);

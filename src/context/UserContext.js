@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
             }
             const userData = await response.json();
             setUser(userData);
+            localStorage.setItem('token', userData.token); // Store token in local storage
             setLoading(false);
         } catch(err){
             setError(true);
@@ -45,12 +46,38 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
+    const fetchWithAuth = async (url, options = {}) => {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        const headers = {
+            ...options.headers,
+            Authorization: `Bearer ${token}`, // Add the Authorization header
+        };
+    
+        const response = await fetch(url, {
+            ...options,
+            headers,
+        });
+    
+        if (response.status === 401) {
+            // Token expired or invalid
+            logout(); // Call the logout function to clear user data
+            throw new Error('Unauthorized');
+        }
+    
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+    
+        return response.json();
+    };
+
     const value = { 
         user, 
         login, 
         logout, 
         loading, 
-        error 
+        error,
+        fetchWithAuth, // Expose fetchWithAuth
     };
 
     return (
