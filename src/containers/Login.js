@@ -15,11 +15,9 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
 import CircularProgress from '@mui/material/CircularProgress';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 function Login() {
-  const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
   const { login, loading, error, user } = useUser();
   const navigate =useNavigation();
   const [open, setOpen] = React.useState(false);
@@ -27,9 +25,6 @@ function Login() {
   const [userNameErrorMessage, setUserNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-
-  const [success, setSuccess] = React.useState(false);
-  const timer = React.useRef(undefined);
 
   const handleLogin = async (e) => {
 
@@ -166,7 +161,7 @@ function Login() {
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
-              >Failed attemp.</Alert>
+              >Login failed.</Alert>
             </Collapse>
             <StyledTextField id="username" name="username" variant="outlined" type="text" label="Username" error={userNameError} helperText={userNameErrorMessage} required></StyledTextField>
             <StyledTextField id="password" name="password" variant="outlined" type="password" label="Password" error={passwordError} helperText={passwordErrorMessage} required></StyledTextField>

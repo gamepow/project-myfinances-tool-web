@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useUser } from '../context/UserContext';
-import { useNavigation } from '../context/NavigationContext';
-import { useLocation } from 'react-router-dom';
 import '../components/css/Main.css';
 import '../components/css/Dashboard.css';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { PieChart } from '@mui/x-charts/PieChart';
-import { Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import TransactionDialog from './TransactionDialog'; // Import the new component
 import PieChartComponent from '../components/PieChart'; // Import the PieChartComponent
 
@@ -27,7 +20,7 @@ function Dashboard() {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetchWithAuth(`/api/category/${user.id}`); // Pass the user id to the endpoint
+        const response = await fetchWithAuth(`/api/private/category/${user.id}`); // Pass the user id to the endpoint
         console.log('response.data: ' + response.data); // Debugging categories response
         setCategories(response.data); // Update the categories state with the fetched data
       } catch (error) {
@@ -48,13 +41,6 @@ function Dashboard() {
     if (reason !== 'backdropClick') {
       setOpenDialog(false);
     }
-  }, []);
-
-  const saveTransaction = useCallback((transactionData) => {
-    // Log the user input data
-    console.log('Transaction Data:', transactionData);
-
-    setOpenDialog(false);
   }, []);
 
   // TODO change this with a DB select
@@ -83,7 +69,6 @@ function Dashboard() {
           open={openDialog}
           onClose={handleCloseDialog}
           categories={categories}
-          onSave={saveTransaction}
         />
       </Box>
     </LocalizationProvider>
