@@ -20,9 +20,9 @@ function App() {
       <Router>
           <UserProvider>
             <NavigationProvider>
-              <div className="app-background">
+              <div className="app-container">
                 <Topbar />
-                <div classname='content'>
+                <div className='content'>
                   <Routes>
                     <Route path="/" element={<Landingpage />} />
                     <Route path="/login" element={<Loginpage />} />

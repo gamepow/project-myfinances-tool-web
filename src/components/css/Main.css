@@ -1,14 +1,19 @@
-.app-background {
-  background-color: #C0B7B1; /* Change this to your desired background color */
-  min-height: 100vh; /* Ensure the background covers the full height of the viewport */
+/* General styles */
+html, body, #root {
+  height: 100%; /* Make sure these elements take up the full viewport height */
+  margin: 0;
+}
+
+.app-container {
   display: flex;
   flex-direction: column;
+  min-height: 100vh; /* Ensure the container takes at least the full viewport height */
+  background-color: #C0B7B1; /* Change this to your desired background color */
 }
 
 .content {
-  flex: 1; /* Ensure the content area grows to fill the available space */
+  flex: 3; /* This makes the content section grow to fill available space */
 }
-
 
 .landingPage {
   font-family: Arial, sans-serif;
