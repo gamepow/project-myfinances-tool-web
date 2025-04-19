@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useUser } from '../context/UserContext';
@@ -8,11 +8,16 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TransactionDialog from './TransactionDialog'; // Import the new component
 import PieChartComponent from '../components/PieChart'; // Import the PieChartComponent
+import { Typography, Container } from '@mui/material';
+import dayjs from 'dayjs'; // Import dayjs
 
 function Dashboard() {
   const { user, fetchWithAuth } = useUser();
   const [categories, setCategories] = useState([]); // State to store categories
   const [openDialog, setOpenDialog] = useState(false); // State to control the popup
+  const [transactionExpensesSummary, setTransactionExpensesSummary] = useState([]); // State to store transaction summary
+  const [transactionIncomeSummary, setTransactionIncomeSummary] = useState([]); // State to store transaction summary
+  const currentMonthYear = dayjs().format('MMMM YYYY'); // Format the current date
 
   // Fetch Categories from the API
   useEffect(() => {
@@ -33,6 +38,38 @@ function Dashboard() {
     }
   }, [user, fetchWithAuth]);
 
+  useEffect(() => {
+    const fetchTransactionExpensesSummary = async () => {
+      try {
+        const response = await fetchWithAuth(`/api/private/transaction/summary/expenses/${user.id}`);
+        console.log('Transaction Summary Response:', response);
+        setTransactionExpensesSummary(response);
+      } catch (error) {
+        console.error('Error fetching transaction summary:', error);
+      }
+    };
+  
+    if (user?.id) {
+      fetchTransactionExpensesSummary();
+    }
+  }, [user, fetchWithAuth]);
+
+  useEffect(() => {
+    const fetchTransactionIncomeSummary = async () => {
+      try {
+        const response = await fetchWithAuth(`/api/private/transaction/summary/income/${user.id}`);
+        console.log('Transaction Summary Response:', response);
+        setTransactionIncomeSummary(response);
+      } catch (error) {
+        console.error('Error fetching transaction summary:', error);
+      }
+    };
+  
+    if (user?.id) {
+      fetchTransactionIncomeSummary();
+    }
+  }, [user, fetchWithAuth]);
+
   const handleAddTransaction = useCallback(() => {
     setOpenDialog(true);
   }, [setOpenDialog]); // Add setOpenDialog as a dependency
@@ -43,22 +80,22 @@ function Dashboard() {
     }
   }, []);
 
-  // TODO change this with a DB select
-  const customData = useMemo(() => [
-    { id: 0, value: 15, label: 'Apples' },
-    { id: 1, value: 25, label: 'Bananas' },
-    { id: 2, value: 20, label: 'Cherries' },
-    { id: 3, value: 35, label: 'Dates' },
-    { id: 5, value: 10, label: 'Lemon' },
-    { id: 6, value: 5, label: 'Watermelon' },
-    { id: 7, value: 30, label: 'Pineaple' },
-  ], []);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box>
+        <Box sx={{ 
+              display: 'flex',
+              justifyContent: 'center', 
+              flexDirection: 'column', // Change flex direction to column
+              alignItems: 'center', // Center items horizontally
+              mt: 2 }}>
+          <Typography variant="h4" sx={{ mt: 4 }}>
+              {currentMonthYear} {/* Display the current month and year */}
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <PieChartComponent data={customData} />
+        <PieChartComponent data={transactionExpensesSummary} title="Expenses" />
+        <PieChartComponent data={transactionIncomeSummary} title="Income" />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Button variant="contained" size="large" onClick={handleAddTransaction}>
