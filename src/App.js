@@ -13,11 +13,12 @@ import Footer from './containers/Footer'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme'; // Import your custom theme
 
+const basename = process.env.NODE_ENV === "production" ? "/myfinancestool" : "/";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router basename={basename}>
           <UserProvider>
             <NavigationProvider>
               <div className="app-container">

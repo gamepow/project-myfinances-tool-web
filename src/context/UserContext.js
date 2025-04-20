@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         setError(false);
         try{
-            const response = await fetch('http://localhost:8080/api/public/auth/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/public/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,8 +52,13 @@ export const UserProvider = ({ children }) => {
             ...options.headers,
             Authorization: `Bearer ${token}`, // Add the Authorization header
         };
+
+        // Prepend API URL if not already present
+        const apiUrl = url.startsWith('http')
+        ? url
+        : `${process.env.REACT_APP_API_URL}${url}`;
     
-        const response = await fetch(url, {
+        const response = await fetch(apiUrl, {
             ...options,
             headers,
         });

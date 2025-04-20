@@ -29,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -52,8 +54,5 @@
   "overrides": {
     "nth-check": ">=2.0.1"
   },
-  "proxy": "http://localhost:8080",
-  "homepage": "https://gamepow.github.io/myfinancestool",
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
+  "homepage": "https://gamepow.github.io/project-myfinances-tool-web/"
 }
