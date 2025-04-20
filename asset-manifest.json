@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/myfinancestool/static/css/main.e312170e.css",
+    "main.js": "/myfinancestool/static/js/main.b66d8235.js",
+    "static/js/453.26189365.chunk.js": "/myfinancestool/static/js/453.26189365.chunk.js",
+    "index.html": "/myfinancestool/index.html",
+    "main.e312170e.css.map": "/myfinancestool/static/css/main.e312170e.css.map",
+    "main.b66d8235.js.map": "/myfinancestool/static/js/main.b66d8235.js.map",
+    "453.26189365.chunk.js.map": "/myfinancestool/static/js/453.26189365.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e312170e.css",
+    "static/js/main.b66d8235.js"
+  ]
+}
