@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/project-myfinances-tool-web/static/css/main.e312170e.css",
-    "main.js": "/project-myfinances-tool-web/static/js/main.1fc21c25.js",
+    "main.js": "/project-myfinances-tool-web/static/js/main.8b5a1f91.js",
     "static/js/453.26189365.chunk.js": "/project-myfinances-tool-web/static/js/453.26189365.chunk.js",
     "index.html": "/project-myfinances-tool-web/index.html",
     "main.e312170e.css.map": "/project-myfinances-tool-web/static/css/main.e312170e.css.map",
-    "main.1fc21c25.js.map": "/project-myfinances-tool-web/static/js/main.1fc21c25.js.map",
+    "main.8b5a1f91.js.map": "/project-myfinances-tool-web/static/js/main.8b5a1f91.js.map",
     "453.26189365.chunk.js.map": "/project-myfinances-tool-web/static/js/453.26189365.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e312170e.css",
-    "static/js/main.1fc21c25.js"
+    "static/js/main.8b5a1f91.js"
   ]
 }
