@@ -1,7 +1,6 @@
 import React from 'react';
-import '../components/css/Topbar.css';
+import '../layouts/css/Topbar.css';
 import { useNavigation } from '../context/NavigationContext';
-import { alpha, styled } from '@mui/material/styles';
 import { useUser } from '../context/UserContext';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -21,6 +20,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
+import Link from '@mui/material/Link';
 
 function Topbar(){
     const navigate = useNavigation();
@@ -119,7 +119,22 @@ function Topbar(){
                         <div></div>
                     )}
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <Typography variant="h4">My Finances</Typography>
+                    <Link
+                        component="button"
+                        variant="h4"
+                        underline="hover"
+                        color="inherit"
+                        sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+                        onClick={() => {
+                            if (user) {
+                                navigate('/dashboard');
+                            } else {
+                                navigate('/');
+                            }
+                        }}
+                    >
+                        My Finances
+                    </Link>
                     </Box>
                     <Box>
                         {user ? (

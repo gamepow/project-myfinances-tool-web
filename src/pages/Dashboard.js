@@ -1,23 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import useFetchWithAuth from '../hooks/useAuth';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useUser } from '../context/UserContext';
-import '../components/css/Main.css';
-import '../components/css/Dashboard.css';
+import '../layouts/css/Main.css';
+import '../layouts/css/Dashboard.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TransactionDialog from './TransactionDialog'; // Import the new component
-import PieChartComponent from '../components/PieChart'; // Import the PieChartComponent
+import PieChartComponent from '../layouts/PieChart'; // Import the PieChartComponent
 import { Typography, Container } from '@mui/material';
 import dayjs from 'dayjs'; // Import dayjs
 
 function Dashboard() {
-  const { user, fetchWithAuth } = useUser();
+  const { user } = useUser();
   const [categories, setCategories] = useState([]); // State to store categories
   const [openDialog, setOpenDialog] = useState(false); // State to control the popup
   const [transactionExpensesSummary, setTransactionExpensesSummary] = useState([]); // State to store transaction summary
   const [transactionIncomeSummary, setTransactionIncomeSummary] = useState([]); // State to store transaction summary
   const currentMonthYear = dayjs().format('MMMM YYYY'); // Format the current date
+  const fetchWithAuth = useFetchWithAuth(); // Use the custom hook
 
   // Fetch Categories from the API
   useEffect(() => {

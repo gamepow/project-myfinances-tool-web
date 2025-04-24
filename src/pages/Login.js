@@ -1,5 +1,5 @@
-import '../components/css/Login.css';
-import '../components/css/Main.css';
+import '../layouts/css/Login.css';
+import '../layouts/css/Main.css';
 import { useNavigation } from '../context/NavigationContext';
 import React, { useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext';

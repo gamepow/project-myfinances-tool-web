@@ -46,43 +46,12 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
-    const fetchWithAuth = async (url, options = {}) => {
-        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-        const headers = {
-            ...options.headers,
-            Authorization: `Bearer ${token}`, // Add the Authorization header
-        };
-
-        // Prepend API URL if not already present
-        const apiUrl = url.startsWith('http')
-        ? url
-        : `${process.env.REACT_APP_API_URL}${url}`;
-    
-        const response = await fetch(apiUrl, {
-            ...options,
-            headers,
-        });
-    
-        if (response.status === 401) {
-            // Token expired or invalid
-            logout(); // Call the logout function to clear user data
-            throw new Error('Unauthorized');
-        }
-    
-        if (!response.ok) {
-            throw new Error('Failed to fetch');
-        }
-    
-        return response.json();
-    };
-
     const value = { 
         user, 
         login, 
         logout, 
         loading, 
         error,
-        fetchWithAuth, // Expose fetchWithAuth
     };
 
     return (
