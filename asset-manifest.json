@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/project-myfinances-tool-web/static/css/main.e312170e.css",
-    "main.js": "/project-myfinances-tool-web/static/js/main.458ee2f7.js",
-    "static/js/453.26189365.chunk.js": "/project-myfinances-tool-web/static/js/453.26189365.chunk.js",
-    "index.html": "/project-myfinances-tool-web/index.html",
-    "main.e312170e.css.map": "/project-myfinances-tool-web/static/css/main.e312170e.css.map",
-    "main.458ee2f7.js.map": "/project-myfinances-tool-web/static/js/main.458ee2f7.js.map",
-    "453.26189365.chunk.js.map": "/project-myfinances-tool-web/static/js/453.26189365.chunk.js.map"
+    "main.css": "/static/css/main.c2edd99f.css",
+    "main.js": "/static/js/main.40ae757e.js",
+    "static/js/453.26189365.chunk.js": "/static/js/453.26189365.chunk.js",
+    "index.html": "/index.html",
+    "main.c2edd99f.css.map": "/static/css/main.c2edd99f.css.map",
+    "main.40ae757e.js.map": "/static/js/main.40ae757e.js.map",
+    "453.26189365.chunk.js.map": "/static/js/453.26189365.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e312170e.css",
-    "static/js/main.458ee2f7.js"
+    "static/css/main.c2edd99f.css",
+    "static/js/main.40ae757e.js"
   ]
 }
