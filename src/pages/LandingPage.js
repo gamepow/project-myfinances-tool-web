@@ -43,7 +43,8 @@ function LandingPage(){
                 <img 
                     src="/finances-landing.png"
                     alt="Finances dashboard illustration" 
-                    style={{ maxWidth: '80%',
+                    style={{ 
+                        maxWidth: {xs: '100%', sm: '80%'},
                         height: 'auto',
                         borderRadius: 8,
                         maxHeight: 400,

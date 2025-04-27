@@ -12,6 +12,7 @@ import Topbar from './pages/Topbar'
 import Footer from './pages/Footer'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme'; // Import your custom theme
+import Box from '@mui/material/Box';
 
 const basename = process.env.NODE_ENV === "production" ? "/project-myfinances-tool-web" : "";
 console.log("basename:" + basename);
@@ -22,9 +23,15 @@ function App() {
       <Router basename={basename}>
           <UserProvider>
             <NavigationProvider>
-              <div className="app-container">
+              <Box
+                sx={{
+                  minHeight: '100vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >              
                 <Topbar />
-                <div className='content'>
+                <Box sx={{ flex: 1 }}>
                   <Routes>
                     <Route path="/" element={<Landingpage />} />
                     <Route path="/login" element={<Loginpage />} />
@@ -36,9 +43,9 @@ function App() {
                       }  
                     />
                   </Routes>
-                </div>
+                </Box>
                 <Footer />
-              </div>
+              </Box>
             </NavigationProvider>
           </UserProvider>
         </Router>

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import useFetchWithAuth from '../hooks/useAuth';
 import {
   Dialog,
   DialogTitle,
@@ -21,8 +22,9 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-function TransactionDialog({ open, onClose, categories }) {
-  const { user, fetchWithAuth } = useUser();
+function TransactionDialog({ open, onClose, categories, onTransactionSaved}) {
+  const { user } = useUser();
+  const fetchWithAuth = useFetchWithAuth(); // Use the custom hook
   const [transactionType, setTransactionType] = useState('');
   const [categoryId, setCategory] = useState('');
   const [amount, setAmount] = useState('');
@@ -37,6 +39,7 @@ function TransactionDialog({ open, onClose, categories }) {
   const [amountError, setAmountError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [transactionDateError, setTransactionDateError] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const clearForm = useCallback(() => {
     setTransactionType('');
@@ -100,6 +103,7 @@ function TransactionDialog({ open, onClose, categories }) {
     }
 
     if (hasErrors) {
+      setAlertMessage('Please fill in all required fields.');
       setLoading(false); // Stop loading if there are errors
       setOpenAlert(true); // Show alert if there are errors
       return;
@@ -129,8 +133,9 @@ function TransactionDialog({ open, onClose, categories }) {
         if (response.transactionId === null) {
           throw new Error('Network response was not ok');
         }
+        if (onTransactionSaved) onTransactionSaved(); // <-- Add this line
         onClose(); // Close the dialog on successful save
-        return response.json();
+        return response;
       })
       .then(data => {
         console.log('Success:', data);
@@ -138,13 +143,15 @@ function TransactionDialog({ open, onClose, categories }) {
       })
       .catch(error => {
         console.error('Error:', error);
+        setAlertMessage('Add Transaction failed. Please try again.');
+        setOpenAlert(true); // Show alert if there was an error
         // Handle error (e.g., display an error message to the user)
       })
       .finally(() => {
         setLoading(false); // Stop loading regardless of success or failure
       });
     
-  }, [transactionType, categoryId, amount, description, transactionDate]);
+  }, [transactionType, categoryId, amount, description, transactionDate, onTransactionSaved]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" disablePortal disableEscapeKeyDown>
@@ -165,7 +172,7 @@ function TransactionDialog({ open, onClose, categories }) {
             <CloseIcon fontSize="inherit" />
           </IconButton>
         }
-        >Add Transaction failed.</Alert>
+        > {alertMessage} </Alert>
       </Collapse>
       <DialogContent>
         <Box>
@@ -208,15 +215,27 @@ function TransactionDialog({ open, onClose, categories }) {
             margin="dense"
             id="amount"
             label="Amount"
-            type="number"
+            type="text"
             fullWidth
             variant="outlined"
+            value={amount}
             slotProps={{
               input: {
                 startAdornment: <InputAdornment position="start">CRC</InputAdornment>,
               },
+              htmlInput: { maxLength: 15 }
             }}
-            onChange={(event) => setAmount(event.target.value)}
+            onChange={(event) => {
+              let value = event.target.value;
+              // Allow only digits and a single dot, and up to two decimals
+              if (
+                /^\d*\.?\d{0,2}$/.test(value) && // Only two decimals allowed
+                (value.match(/\./g) || []).length <= 1 &&
+                value.length <= 15
+              ) {
+                setAmount(value);
+              }
+            }}
             required
             error={amountError}
             helperText={amountError ? 'Please enter an amount' : ''}
@@ -232,6 +251,7 @@ function TransactionDialog({ open, onClose, categories }) {
             onChange={(event) => setDescription(event.target.value)}
             error={descriptionError}
             helperText={descriptionError ? 'Please enter a description' : ''}
+            slotProps={{ htmlInput: { maxLength: 50 } }}
           />
           <Box sx={{ mt: 1 }}>
             <DatePicker

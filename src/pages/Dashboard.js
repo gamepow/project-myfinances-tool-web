@@ -20,6 +20,11 @@ function Dashboard() {
   const [transactionIncomeSummary, setTransactionIncomeSummary] = useState([]); // State to store transaction summary
   const currentMonthYear = dayjs().format('MMMM YYYY'); // Format the current date
   const fetchWithAuth = useFetchWithAuth(); // Use the custom hook
+  const [refreshCharts, setRefreshCharts] = useState(false);
+
+  const handleTransactionSaved = () => {
+    setRefreshCharts(prev => !prev); // Toggle to trigger useEffect
+  };
 
   // Fetch Categories from the API
   useEffect(() => {
@@ -54,7 +59,7 @@ function Dashboard() {
     if (user?.id) {
       fetchTransactionExpensesSummary();
     }
-  }, [user, fetchWithAuth]);
+  }, [user, fetchWithAuth, refreshCharts]);
 
   useEffect(() => {
     const fetchTransactionIncomeSummary = async () => {
@@ -70,7 +75,7 @@ function Dashboard() {
     if (user?.id) {
       fetchTransactionIncomeSummary();
     }
-  }, [user, fetchWithAuth]);
+  }, [user, fetchWithAuth, refreshCharts]);
 
   const handleAddTransaction = useCallback(() => {
     setOpenDialog(true);
@@ -95,19 +100,33 @@ function Dashboard() {
               {currentMonthYear} {/* Display the current month and year */}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <PieChartComponent data={transactionExpensesSummary} title="Expenses" />
-        <PieChartComponent data={transactionIncomeSummary} title="Income" />
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout
+            alignItems: 'center',
+            justifyContent: 'center', 
+            gap: 3,
+            mt: 2 
+          }}
+        >
+          <Box sx={{ width: { xs: '100%', md: 400 }, mb: {xs: 2, md: 0 }}}>
+            <PieChartComponent data={transactionExpensesSummary} title="Expenses" />
+          </Box>
+          <Box sx={{ width: { xs: '100%', md: 400 } }}>
+            <PieChartComponent data={transactionIncomeSummary} title="Income" />
+          </Box>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button variant="contained" size="large" onClick={handleAddTransaction}>
-          Add Transaction
-        </Button>
-      </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 4 }}>
+          <Button variant="contained" size="large" onClick={handleAddTransaction}>
+            Add Transaction
+          </Button>
+        </Box>
         <TransactionDialog
           open={openDialog}
           onClose={handleCloseDialog}
           categories={categories}
+          onTransactionSaved={handleTransactionSaved}
         />
       </Box>
     </LocalizationProvider>

@@ -84,42 +84,31 @@ function Login() {
     flexDirection: 'column',
     alignSelf: 'center',
     width: '100%',
-    padding: theme.spacing(4),
+    maxWidth: '400',
+    padding: theme.spacing(2),
     gap: theme.spacing(2),
     margin: 'auto',
-    
+    boxSizing: 'border-box', // Ensure padding doesn't overflow
     [theme.breakpoints.up('sm')]: {
-      maxWidth: '450px',
+      maxWidth: '400px',
+      padding: theme.spacing(4),
     },
     boxShadow:
       'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    ...theme.applyStyles('dark', {
-      boxShadow:
-        'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-    }),
   }));
 
   const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: 'calc((1 - var(--template-frame-height, 0)) * 80dvh)',
-    minHeight: '100%',
-    padding: theme.spacing(10),
+    minHeight: '70vh',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(2),
+    width: '100vw',
+    boxSizing: 'border-box',
     [theme.breakpoints.up('sm')]: {
       padding: theme.spacing(4),
     },
-    '&::before': {
-      content: '""',
-      display: 'block',
-      position: 'absolute',
-      zIndex: -1,
-      inset: 0,
-      backgroundImage:
-        'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-      backgroundRepeat: 'no-repeat',
-      ...theme.applyStyles('dark', {
-        backgroundImage:
-          'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-      }),
-    },
+    background:
+      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
   }));
 
   const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -144,29 +133,55 @@ function Login() {
             gap: 2,
           }}
         >
-          <FormControl sx={{ padding: '20px' }}>
+          <FormControl sx={{ width: '100%' }}>
             <Collapse in={open}>
               <Alert severity="error" variant="filled" sx={{ mb: 2 }}
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  margin-bottom= '5px'
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                  sx={{ mb: 1 }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setOpen(false)}
+                    sx={{ mb: 1 }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
               >Login failed.</Alert>
             </Collapse>
-            <StyledTextField id="username" name="username" variant="outlined" type="text" label="Username" error={userNameError} helperText={userNameErrorMessage} required></StyledTextField>
-            <StyledTextField id="password" name="password" variant="outlined" type="password" label="Password" error={passwordError} helperText={passwordErrorMessage} required></StyledTextField>
-            <Box>
-              <Button type="submit" variant="contained" onClick={validateInputs} size="large" disabled={loading}>Sign in</Button>
+            <StyledTextField
+              id="username"
+              name="username"
+              variant="outlined"
+              type="text"
+              label="Username"
+              error={userNameError}
+              helperText={userNameErrorMessage}
+              required
+              fullWidth
+            />
+            <StyledTextField
+              id="password"
+              name="password"
+              variant="outlined"
+              type="password"
+              label="Password"
+              error={passwordError}
+              helperText={passwordErrorMessage}
+              required
+              fullWidth
+            />
+            <Box sx={{ position: 'relative', mt: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={validateInputs}
+                size="large"
+                disabled={loading}
+                fullWidth
+              >
+                Sign in
+              </Button>
               {loading && (
                 <CircularProgress
                   size={24}
@@ -179,7 +194,7 @@ function Login() {
                   }}
                 />
               )}
-          </Box>
+            </Box>
           </FormControl>
         </Box>
       </Card>

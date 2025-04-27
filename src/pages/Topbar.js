@@ -6,7 +6,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
@@ -21,10 +20,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
 
 function Topbar(){
     const navigate = useNavigation();
     const { user, logout } = useUser();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const [drawerOpenMain, setDrawerOpenMain] = React.useState(false);
+    const [drawerOpenProfile, setDrawerOpenProfile] = React.useState(false);
 
     const handleSigninPage = () => {
         navigate('/login');
@@ -36,14 +43,21 @@ function Topbar(){
 
     const [mainAnchorEl, setMainAnchorEl] = React.useState(null);
     const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
-    const openMain = Boolean(mainAnchorEl);
-    const openProfile = Boolean(profileAnchorEl);
-    const handleMainClick = (event) => {
-        setMainAnchorEl(event.currentTarget);
+    
+    const handleDrawerOpen = (event) => {
+        setDrawerOpenMain(true);
     };
 
-    const handleProfileClick = (event) => {
-        setProfileAnchorEl(event.currentTarget);
+    const handleDrawerClose = () => {
+        setDrawerOpenMain(false);
+    };
+
+    const handleDrawerProfileOpen = (event) => {
+        setDrawerOpenProfile(true);
+    };
+
+    const handleDrawerProfileClose = () => {
+        setDrawerOpenProfile(false);
     };
 
     const handleMainRedirect = (url) => {
@@ -69,10 +83,6 @@ function Topbar(){
         setProfileAnchorEl(null);
     }
 
-    const handleMainClose = () => {
-        setMainAnchorEl(null);
-    }
-
     const handleProfileClose = () => {
         setProfileAnchorEl(null);
     }
@@ -89,87 +99,177 @@ function Topbar(){
 
     return (
         <Box>
-            <AppBar 
-                position="static"
-            >
-                <Toolbar>
-                    {user ? (
-                        <div>
-                            <IconButton
-                                onClick={handleMainClick}
-                            >
-                                <MenuIcon color="tertiary" />
-                            </IconButton>
-                            <Menu 
-                                anchorEl={mainAnchorEl}
-                                open={openMain}
-                                onClose={handleMainClose}
-                            >
-                                {mainListItems.map((item, index) => (
-                                    <ListItem key={index} disablePadding>
-                                        <ListItemButton onClick={() => handleMainRedirect(item.url)}>
-                                            <ListItemIcon>{item.icon}</ListItemIcon>
-                                            <ListItemText primary={item.text} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                ))}
-                            </Menu>
-                        </div>
-                    ) : (
-                        <div></div>
+            <AppBar position="static">
+                <Toolbar
+                    sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    px: { xs: 1, sm: 2 },
+                    py: { xs: 1, sm: 0 },
+                    minHeight: { xs: 56, sm: 64 }
+                    }}
+                >
+                    {/* Left: Menu Icon */}
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {user && (
+                        <>
+                        <IconButton
+                            onClick={handleDrawerOpen}
+                            sx={{ mr: 1 }}
+                        >
+                            <MenuIcon color="tertiary" />
+                        </IconButton>
+                        <Drawer
+                            anchor="left"
+                            open={drawerOpenMain}
+                            onClose={handleDrawerClose}
+                            PaperProps={{
+                            sx: { width: { xs: 220, sm: 280 } }
+                            }}
+                        >
+                            <List>
+                            {mainListItems.map((item, index) => (
+                                <ListItem key={index} disablePadding>
+                                <ListItemButton
+                                    onClick={() => {
+                                    handleMainRedirect(item.url);
+                                    handleDrawerClose();
+                                    }}
+                                >
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                    <ListItemText primary={item.text} />
+                                </ListItemButton>
+                                </ListItem>
+                            ))}
+                            </List>
+                        </Drawer>
+                        </>
                     )}
-                    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                    <Link
+                    </Box>
+
+                    {/* Center: Brand/Logo */}
+                    <Box sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        alignItems: 'left',
+                        justifyContent: 'left',
+                        minWidth: 0 // Prevents overflow
+                    }}>
+                        <Link
                         component="button"
-                        variant="h4"
+                        variant="h5"
                         underline="hover"
                         color="inherit"
-                        sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+                        sx={{
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: { xs: '1.5rem', sm: '2rem' },
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}
                         onClick={() => {
                             if (user) {
-                                navigate('/dashboard');
+                            navigate('/dashboard');
                             } else {
-                                navigate('/');
+                            navigate('/');
                             }
                         }}
-                    >
+                        >
                         My Finances
-                    </Link>
+                        </Link>
                     </Box>
-                    <Box>
+
+                    {/* Right: Profile or Auth Buttons */}
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        minWidth: 0
+                    }}>
                         {user ? (
-                            <>
-                                <div>
-                                    <IconButton
-                                        onClick={handleProfileClick}
+                        <>
+                            <IconButton
+                            onClick={handleDrawerProfileOpen}
+                            sx={{ mr: 1 }}
+                            >
+                                <AccountCircle sx={{ width: 32, height: 32 }} color="tertiary" />
+                            </IconButton>
+                            <Drawer
+                                anchor="right"
+                                open={drawerOpenProfile}
+                                onClose={handleDrawerProfileClose}
+                                PaperProps={{
+                                sx: { width: { xs: 220, sm: 280 } }
+                                }}
+                            >
+                                <List>
+                                {profileListItems.map((item2, index2) => (
+                                    <ListItem key={index2} disablePadding>
+                                    <ListItemButton
+                                        onClick={() => {
+                                        handleMainRedirect(item2.url);
+                                        handleDrawerProfileClose();
+                                        }}
                                     >
-                                        <AccountCircle sx={{ width: 36, height: 36 }} color="tertiary" />
-                                    </IconButton>
-                                    <Menu 
-                                        anchorEl={profileAnchorEl}
-                                        open={openProfile}
-                                        onClose={handleProfileClose}
-                                    >
-                                        {profileListItems.map((item2, index2) => (
-                                            <ListItem key={index2} disablePadding>
-                                                <ListItemButton onClick={() => handleProfileRedirect(item2.url)}>
-                                                    <ListItemIcon>{item2.icon}</ListItemIcon>
-                                                    <ListItemText primary={item2.text} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        ))}
-                                    </Menu>
-                                </div>
-                            </>
+                                        <ListItemIcon>{item2.icon}</ListItemIcon>
+                                        <ListItemText primary={item2.text} />
+                                    </ListItemButton>
+                                    </ListItem>
+                                ))}
+                                </List>
+                            </Drawer>
+                        </>
                         ) : (
-                            <>
-                                <Stack direction="row" spacing={1}>
-                                    <Button variant="contained" size="medium" onClick={handleSigninPage} >Sign In</Button>
-                                    <Button color="white" variant="outlined" size="medium" onClick={handleSignupPage}>New user</Button>
-                                </Stack>
-                            </>
-                        )}                        
+                        <Stack
+                            direction="row"
+                            spacing={1}
+                            sx={{
+                            width: { xs: '100%', sm: 'auto' },
+                            justifyContent: { xs: 'center', sm: 'flex-end' },
+                            alignItems: 'center',
+                            height: 'auto',
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                size="medium"
+                                onClick={handleSigninPage}
+                                fullWidth={isMobile}
+                                sx={{
+                                    fontSize: { xs: '0.9rem', sm: '0.95rem' },
+                                    height: 44, // Set explicit height
+                                    px: 2,
+                                    borderWidth: 2,
+                                    boxSizing: 'border-box'
+                                }}
+                            >
+                                Sign In
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                size="medium"
+                                onClick={handleSignupPage}
+                                fullWidth={isMobile}
+                                sx={{
+                                    fontSize: { xs: '0.9rem', sm: '0.95rem' },
+                                    height: 44, // Match height to Sign In
+                                    px: 2,
+                                    color: 'white',
+                                    borderColor: 'white',
+                                    borderWidth: 1, // Optional: make border more visible
+                                    boxSizing: 'border-box',
+                                    whiteSpace: 'nowrap' // Prevent text wrapping
+                                }}
+                            >
+                                New user
+                            </Button>
+                        </Stack>
+                        )}
                     </Box>
+                    
                 </Toolbar>
             </AppBar>
         </Box>
