@@ -27,20 +27,19 @@ function Login() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
 
   const handleLogin = async (e) => {
-
-    if (userNameError || passwordError) {
-      e.preventDefault();
-      return;
-    }
-
+    e.preventDefault(); // Prevent default form submission
+  
+    const isValid = await validateInputs();
+    if (!isValid) return;
+  
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-
+  
     await login(username, password);
-
-    if(!error){
+  
+    if (!error) {
       navigate('/dashboard');
-    }else{
+    } else {
       setOpen(true);
     }
   };
@@ -88,7 +87,6 @@ function Login() {
     padding: theme.spacing(2),
     gap: theme.spacing(2),
     margin: 'auto',
-    boxSizing: 'border-box', // Ensure padding doesn't overflow
     [theme.breakpoints.up('sm')]: {
       maxWidth: '400px',
       padding: theme.spacing(4),
@@ -175,7 +173,6 @@ function Login() {
               <Button
                 type="submit"
                 variant="contained"
-                onClick={validateInputs}
                 size="large"
                 disabled={loading}
                 fullWidth

@@ -41,8 +41,8 @@ function LandingPage(){
                 }}
             >
                 <img 
-                    src="/finances-landing.png"
-                    alt="Finances dashboard illustration" 
+                    src={process.env.PUBLIC_URL + '/finances-landing.png'}
+                    alt="Landing" 
                     style={{ 
                         maxWidth: {xs: '100%', sm: '80%'},
                         height: 'auto',
