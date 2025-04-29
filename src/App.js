@@ -6,6 +6,7 @@ import { UserProvider } from './context/UserContext';
 import { NavigationProvider } from './context/NavigationContext';
 import Landingpage from './pages/LandingPage';
 import Dashboardpage from './pages/Dashboard';
+import TransactionsPage from './pages/Transactions';
 import Loginpage from './pages/Login';
 import ProtectedRoute from './layouts/ProtectedRoute';
 import Topbar from './pages/Topbar'
@@ -39,6 +40,13 @@ function App() {
                       {
                         <ProtectedRoute>
                           <Dashboardpage />
+                        </ProtectedRoute> 
+                      }  
+                    />
+                    <Route path="/transactions" element=
+                      {
+                        <ProtectedRoute>
+                          <TransactionsPage />
                         </ProtectedRoute> 
                       }  
                     />
