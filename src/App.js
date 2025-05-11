@@ -8,6 +8,7 @@ import Landingpage from './pages/LandingPage';
 import Dashboardpage from './pages/Dashboard';
 import TransactionsPage from './pages/Transactions';
 import Loginpage from './pages/Login';
+import Signuppage from './pages/Signup';
 import ProtectedRoute from './layouts/ProtectedRoute';
 import Topbar from './pages/Topbar'
 import Footer from './pages/Footer'
@@ -36,6 +37,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Landingpage />} />
                     <Route path="/login" element={<Loginpage />} />
+                    <Route path="/signup" element={<Signuppage />} />
                     <Route path="/dashboard" element=
                       {
                         <ProtectedRoute>

@@ -1,7 +1,7 @@
 import '../layouts/css/Login.css';
 import '../layouts/css/Main.css';
 import { useNavigation } from '../context/NavigationContext';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { useUser } from '../context/UserContext';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
@@ -16,6 +16,48 @@ import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
 import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'center',
+  width: '100%',
+  maxWidth: '400',
+  padding: theme.spacing(2),
+  gap: theme.spacing(2),
+  margin: 'auto',
+  [theme.breakpoints.up('sm')]: {
+    maxWidth: '400px',
+    padding: theme.spacing(4),
+  },
+  boxShadow:
+    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+}));
+
+const SignInContainer = styled(Stack)(({ theme }) => ({
+  minHeight: '70vh',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: theme.spacing(2),
+  width: '100vw',
+  boxSizing: 'border-box',
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(4),
+  },
+  background:
+    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(2), // Use theme spacing for consistency
+}));
+
+const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
+  marginBottom: theme.spacing(2), // Use theme spacing for consistency
+}));
 
 function Login() {
   const { login, loading, error, user } = useUser();
@@ -25,6 +67,9 @@ function Login() {
   const [userNameErrorMessage, setUserNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -78,45 +123,6 @@ function Login() {
     }
   }, [user, error, navigate]);
 
-  const Card = styled(MuiCard)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '100%',
-    maxWidth: '400',
-    padding: theme.spacing(2),
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '400px',
-      padding: theme.spacing(4),
-    },
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  }));
-
-  const SignInContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '70vh',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: theme.spacing(2),
-    width: '100vw',
-    boxSizing: 'border-box',
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4),
-    },
-    background:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-  }));
-
-  const StyledTextField = styled(TextField)(({ theme }) => ({
-    marginBottom: theme.spacing(2), // Use theme spacing for consistency
-  }));
-
-  const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
-    marginBottom: theme.spacing(2), // Use theme spacing for consistency
-  }));
-
   return (
     <SignInContainer>
       <Card variant="outlined">
@@ -162,12 +168,26 @@ function Login() {
               id="password"
               name="password"
               variant="outlined"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               label="Password"
               error={passwordError}
               helperText={passwordErrorMessage}
               required
               fullWidth
+              InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                    </InputAdornment>
+                ),
+            }}
             />
             <Box sx={{ position: 'relative', mt: 2 }}>
               <Button

@@ -266,7 +266,7 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved}) {
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
         <Box>
-          <Button onClick={onClose} color="primary" size="large">
+          <Button onClick={onClose} color="primary" size="large" disabled={loading}>
             Cancel
           </Button>
           <Button type="submit" loading={loading} onClick={handleSave} variant="contained" color="primary" size="large" sx={{ ml: 2 }} disabled={loading}>
