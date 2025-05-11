@@ -30,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:prod",
     "deploy": "gh-pages -d build",
     "build:prod": "cross-env REACT_APP_API_URL=https://project-myfinances-tool-latest.onrender.com npm run build"
   },
@@ -56,5 +56,8 @@
     "nth-check": ">=2.0.1",
     "postcss": "^8.4.47"
   },
-  "homepage": "https://gamepow.github.io/project-myfinances-tool-web/"
+  "homepage": "https://gamepow.github.io/project-myfinances-tool-web/",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
 }
