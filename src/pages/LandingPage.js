@@ -30,7 +30,12 @@ function LandingPage(){
                     Welcome to My Finances Tool
                 </Typography>
                 <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
-                Track. Report. Control. Simplify your finances with your personal, React-powered dashboard. Effortlessly manage transactions, visualize your spending with customizable reports, and organize everything with personalized categories. Get a clear picture of your financial life, all in one vibrant space.
+                    This is a personal demo application for managing your finances. The idea is to display my skills in React and Material UI, while also providing a useful tool for users.
+                    To use this tool for demo purposes, please create and account and login. Or you can use the demo account with the following credentials:
+                    <br />
+                    <strong>Username: test</strong>
+                    <br />
+                    <strong>Password: test</strong>
                 </Typography>
             </Box>
             <Box sx={{ 

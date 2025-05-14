@@ -26,11 +26,8 @@ const useAuth = () => {
         throw new Error('Unauthorized');
       }
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch');
-      }
-
-      return response.json();
+      const data = await response.json();
+      return { status: response.status, data };
     },
     [logout]
   );

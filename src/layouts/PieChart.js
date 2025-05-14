@@ -38,6 +38,8 @@ const PieChartComponent = memo(function PieChartComponent({ data, title }) {
               colors={['#50881f', '#6f8400', '#8c7d00', '#a97300', '#c56400', '#de511a', '#f2363d', '#ff0761']}
               series={[
               {
+                  startAngle: -90,
+                  endAngle: 90,
                   data: data,
                   arcLabel: (item) => item.label,
                   arcLabelMinAngle: 20,

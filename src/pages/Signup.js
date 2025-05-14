@@ -1,13 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
@@ -15,6 +11,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import { SignInContainer, Card, StyledTextField } from '../layouts/StyledUI';
 
 function validatePassword(password, repeatPassword) {
     if (password !== repeatPassword) {
@@ -45,41 +42,6 @@ function validateUserName(userName) {
     }
     return ""; // No error
   }
-
-  const SignInContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '70vh',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: theme.spacing(2),
-    width: '100vw',
-    boxSizing: 'border-box',
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4),
-    },
-    background:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-  }));
-
-    const Card = styled(MuiCard)(({ theme }) => ({
-        display: 'flex',
-        flexDirection: 'column',
-        alignSelf: 'center',
-        width: '100%',
-        maxWidth: '400',
-        padding: theme.spacing(2),
-        gap: theme.spacing(2),
-        margin: 'auto',
-        [theme.breakpoints.up('sm')]: {
-        maxWidth: '400px',
-        padding: theme.spacing(4),
-        },
-        boxShadow:
-        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    }));
-
-    const StyledTextField = styled(TextField)(({ theme }) => ({
-        marginBottom: theme.spacing(2), // Use theme spacing for consistency
-    }));
 
 function Signup(){
 

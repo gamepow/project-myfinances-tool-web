@@ -8,10 +8,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Menu from '@mui/material/Menu';
 import HomeRoundedIcon from '@mui/icons-material/Home';
 import ReceiptRoundedIcon from '@mui/icons-material/Receipt';
 import ProfileIcon from '@mui/icons-material/Person';
+import PasswordIcon from '@mui/icons-material/Password';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LogOutIcon from '@mui/icons-material/Logout';
 import ListItem from '@mui/material/ListItem';
@@ -40,9 +40,6 @@ function Topbar(){
     const handleSignupPage = () => {
         navigate('/signup');
     };
-
-    const [mainAnchorEl, setMainAnchorEl] = React.useState(null);
-    const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
     
     const handleDrawerOpen = (event) => {
         setDrawerOpenMain(true);
@@ -67,24 +64,6 @@ function Topbar(){
         }else{
             navigate(url);
         }
-
-        setMainAnchorEl(null);
-    }
-
-    const handleProfileRedirect = (url) => {
-        console.log(url);
-        if(url==='/logout'){
-            logout();
-            navigate('/');
-        }else{
-            navigate(url);
-        }
-
-        setProfileAnchorEl(null);
-    }
-
-    const handleProfileClose = () => {
-        setProfileAnchorEl(null);
     }
 
     const mainListItems = [
@@ -94,6 +73,7 @@ function Topbar(){
 
     const profileListItems = [
         { text: 'Profile', icon: <ProfileIcon />, url:'/profile' },
+        { text: 'Change Password', icon: <PasswordIcon />, url:'/change-password' },
         { text: 'Log out', icon: <LogOutIcon />, url:'/logout' }
     ];
 

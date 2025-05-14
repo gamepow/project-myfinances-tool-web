@@ -33,7 +33,7 @@ function Dashboard() {
     const fetchCategories = async () => {
       try {
         const response = await fetchWithAuth(`/api/private/category/${user.id}`); // Pass the user id to the endpoint
-        console.log('response.data: ' + response.data); // Debugging categories response
+        console.log('Categories response: ' + response.data); // Debugging categories response
         setCategories(response.data); // Update the categories state with the fetched data
       } catch (error) {
         console.error('Error fetching categories: ', error);
@@ -49,8 +49,8 @@ function Dashboard() {
     const fetchTransactionExpensesSummary = async () => {
       try {
         const response = await fetchWithAuth(`/api/private/transaction/summary/expenses/${user.id}`);
-        console.log('Transaction Summary Response:', response);
-        setTransactionExpensesSummary(response);
+        console.log('Transaction Summary Expense Response:', response.data);
+        setTransactionExpensesSummary(response.data);
       } catch (error) {
         console.error('Error fetching transaction summary:', error);
       }
@@ -65,8 +65,8 @@ function Dashboard() {
     const fetchTransactionIncomeSummary = async () => {
       try {
         const response = await fetchWithAuth(`/api/private/transaction/summary/income/${user.id}`);
-        console.log('Transaction Summary Response:', response);
-        setTransactionIncomeSummary(response);
+        console.log('Transaction Summary Income Response:', response.data);
+        setTransactionIncomeSummary(response.data);
       } catch (error) {
         console.error('Error fetching transaction summary:', error);
       }

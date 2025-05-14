@@ -10,6 +10,7 @@ import TransactionsPage from './pages/Transactions';
 import Loginpage from './pages/Login';
 import Signuppage from './pages/Signup';
 import ProtectedRoute from './layouts/ProtectedRoute';
+import Profilepage from './pages/Profile';
 import Topbar from './pages/Topbar'
 import Footer from './pages/Footer'
 import { ThemeProvider } from '@mui/material/styles';
@@ -35,7 +36,7 @@ function App() {
                 <Topbar />
                 <Box sx={{ flex: 1 }}>
                   <Routes>
-                    <Route path="/" element={<Landingpage />} />
+                    <Route path="*" element={<Landingpage />} />
                     <Route path="/login" element={<Loginpage />} />
                     <Route path="/signup" element={<Signuppage />} />
                     <Route path="/dashboard" element=
@@ -51,6 +52,13 @@ function App() {
                           <TransactionsPage />
                         </ProtectedRoute> 
                       }  
+                    />
+                    <Route path="/profile" element=
+                      {
+                        <ProtectedRoute>
+                          <Profilepage />
+                        </ProtectedRoute>
+                      }
                     />
                   </Routes>
                 </Box>
