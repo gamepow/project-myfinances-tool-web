@@ -37,7 +37,7 @@ export default function Transactions() {
     const fethTransactions = async () => {
       try {
         const response = await fetchWithAuth(`/api/private/transaction/${user.id}`); // Pass the user id to the endpoint
-        console.log('Transactions List response.data: ' + response.data); // Debugging transactions response
+        console.log('Transactions List response.data: ' + response.data.data); // Debugging transactions response
         setTransactions(response.data); // Update the transactions state with the fetched data  
       }
       catch (error) {

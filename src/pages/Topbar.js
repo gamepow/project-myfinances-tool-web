@@ -1,31 +1,51 @@
 import React from 'react';
-import '../layouts/css/Topbar.css';
+// import '../layouts/css/Topbar.css'; // Consider moving styles into MUI sx or styled-components
 import { useNavigation } from '../context/NavigationContext';
 import { useUser } from '../context/UserContext';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography'; // For the brand name
+import Avatar from '@mui/material/Avatar'; // For a more modern profile icon
+
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeRoundedIcon from '@mui/icons-material/Home';
-import ReceiptRoundedIcon from '@mui/icons-material/Receipt';
-import ProfileIcon from '@mui/icons-material/Person';
-import PasswordIcon from '@mui/icons-material/Password';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import LogOutIcon from '@mui/icons-material/Logout';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'; // Updated Profile Icon
+import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded'; // Updated Password Icon
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'; // Default if no avatar
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'; // Updated Logout Icon
+
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import Link from '@mui/material/Link';
+import Link from '@mui/material/Link'; // Keep for clickable brand
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 
-function Topbar(){
+// If you have a logo SVG or image
+// import YourLogo from './path/to/your-logo.svg';
+
+const mainListItems = [
+    { text: 'Home', icon: <HomeRoundedIcon />, url: '/dashboard' },
+    { text: 'Transactions', icon: <ReceiptRoundedIcon />, url: '/Transactions' }
+];
+
+const profileListItems = [
+    { text: 'Profile', icon: <PersonOutlineRoundedIcon />, url: '/profile' },
+    { text: 'Change Password', icon: <LockResetRoundedIcon />, url: '/change-password' },
+    { text: 'Log out', icon: <LogoutRoundedIcon />, url: '/logout' }
+];
+
+
+function Topbar() {
     const navigate = useNavigation();
     const { user, logout } = useUser();
     const theme = useTheme();
@@ -33,225 +53,181 @@ function Topbar(){
     const [drawerOpenMain, setDrawerOpenMain] = React.useState(false);
     const [drawerOpenProfile, setDrawerOpenProfile] = React.useState(false);
 
-    const handleSigninPage = () => {
-        navigate('/login');
-    };
+    const handleSigninPage = () => navigate('/login');
+    const handleSignupPage = () => navigate('/signup');
+    const handleDrawerOpen = () => setDrawerOpenMain(true);
+    const handleDrawerClose = () => setDrawerOpenMain(false);
+    const handleDrawerProfileOpen = () => setDrawerOpenProfile(true);
+    const handleDrawerProfileClose = () => setDrawerOpenProfile(false);
 
-    const handleSignupPage = () => {
-        navigate('/signup');
-    };
-    
-    const handleDrawerOpen = (event) => {
-        setDrawerOpenMain(true);
-    };
-
-    const handleDrawerClose = () => {
+    const handleMainRedirect = (url) => {
+        if (url === '/logout') {
+            logout();
+            navigate('/');
+        } else {
+            navigate(url);
+        }
+        // Close drawers after navigation
         setDrawerOpenMain(false);
-    };
-
-    const handleDrawerProfileOpen = (event) => {
-        setDrawerOpenProfile(true);
-    };
-
-    const handleDrawerProfileClose = () => {
         setDrawerOpenProfile(false);
     };
 
-    const handleMainRedirect = (url) => {
-        if(url==='/logout'){
-            logout();
-            navigate('/');
-        }else{
-            navigate(url);
-        }
-    }
-
-    const mainListItems = [
-    { text: 'Home', icon: <HomeRoundedIcon /> , url:'/dashboard'},
-    { text: 'Transactions', icon: <ReceiptRoundedIcon />, url:'/Transactions' }
-    ];
-
-    const profileListItems = [
-        { text: 'Profile', icon: <ProfileIcon />, url:'/profile' },
-        { text: 'Change Password', icon: <PasswordIcon />, url:'/change-password' },
-        { text: 'Log out', icon: <LogOutIcon />, url:'/logout' }
-    ];
+    const renderDrawerList = (items, closeDrawerHandler) => (
+        <Box
+            sx={{ width: { xs: 240, sm: 280 }, pt: 2 }} // Added padding top
+            role="presentation"
+            onClick={closeDrawerHandler}
+            onKeyDown={closeDrawerHandler} // For accessibility
+        >
+            <List>
+                {items.map((item) => (
+                    <ListItem key={item.text} disablePadding>
+                        <ListItemButton onClick={() => handleMainRedirect(item.url)}>
+                            <ListItemIcon sx={{ color: theme.palette.primary.main }}> {/* Themed icon color */}
+                                {item.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
 
     return (
-        <Box>
-            <AppBar position="static">
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar
+                position="static"
+                elevation={1} // Subtle elevation
+                sx={{ backgroundColor: theme.palette.background.paper }} // Lighter app bar
+            >
                 <Toolbar
                     sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    px: { xs: 1, sm: 2 },
-                    py: { xs: 1, sm: 0 },
-                    minHeight: { xs: 56, sm: 64 }
+                        justifyContent: 'space-between',
+                        px: { xs: 1, sm: 2 }, // Consistent padding
+                        minHeight: { xs: 56, sm: 64 }
                     }}
                 >
-                    {/* Left: Menu Icon */}
+                    {/* Left: Menu Icon & Brand/Logo */}
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {user && (
-                        <>
-                        <IconButton
-                            onClick={handleDrawerOpen}
-                            sx={{ mr: 1 }}
-                        >
-                            <MenuIcon color="tertiary" />
-                        </IconButton>
-                        <Drawer
-                            anchor="left"
-                            open={drawerOpenMain}
-                            onClose={handleDrawerClose}
-                            PaperProps={{
-                            sx: { width: { xs: 220, sm: 280 } }
+                        {user && (
+                            <IconButton
+                                edge="start" // Better positioning for first item
+                                color="inherit" // Will inherit from AppBar's text color
+                                aria-label="open main menu"
+                                onClick={handleDrawerOpen}
+                                sx={{ mr: { xs: 0.5, sm: 1 }, color: theme.palette.text.primary }} // Themed color
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        <Link
+                            component="button" // Make it behave like a button for onClick
+                            onClick={() => navigate(user ? '/dashboard' : '/')}
+                            sx={{
+                                textDecoration: 'none', // Remove underline from link
+                                display: 'flex',
+                                alignItems: 'center',
                             }}
                         >
-                            <List>
-                            {mainListItems.map((item, index) => (
-                                <ListItem key={index} disablePadding>
-                                <ListItemButton
-                                    onClick={() => {
-                                    handleMainRedirect(item.url);
-                                    handleDrawerClose();
-                                    }}
-                                >
-                                    <ListItemIcon>{item.icon}</ListItemIcon>
-                                    <ListItemText primary={item.text} />
-                                </ListItemButton>
-                                </ListItem>
-                            ))}
-                            </List>
-                        </Drawer>
-                        </>
-                    )}
-                    </Box>
-
-                    {/* Center: Brand/Logo */}
-                    <Box sx={{
-                        flexGrow: 1,
-                        display: 'flex',
-                        alignItems: 'left',
-                        justifyContent: 'left',
-                        minWidth: 0 // Prevents overflow
-                    }}>
-                        <Link
-                        component="button"
-                        variant="h5"
-                        underline="hover"
-                        color="inherit"
-                        sx={{
-                            cursor: 'pointer',
-                            fontWeight: 'bold',
-                            fontSize: { xs: '1.5rem', sm: '2rem' },
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                        }}
-                        onClick={() => {
-                            if (user) {
-                            navigate('/dashboard');
-                            } else {
-                            navigate('/');
-                            }
-                        }}
-                        >
-                        My Finances
+                            {/* Optional: If you have an SVG logo */}
+                            {/* <img src={YourLogo} alt="My Finances Logo" style={{ height: '32px', marginRight: '8px' }} /> */}
+                            <Typography
+                                variant={isMobile ? "h6" : "h5"}
+                                noWrap
+                                component="div" // Using div as it's part of a Link
+                                sx={{
+                                    color: theme.palette.primary.main, // Use primary theme color for brand
+                                    fontWeight: 'bold',
+                                    letterSpacing: '.05rem', // Slight letter spacing
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                MyFinances
+                            </Typography>
                         </Link>
                     </Box>
 
                     {/* Right: Profile or Auth Buttons */}
-                    <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        minWidth: 0
-                    }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {user ? (
-                        <>
-                            <IconButton
-                            onClick={handleDrawerProfileOpen}
-                            sx={{ mr: 1 }}
-                            >
-                                <AccountCircle sx={{ width: 32, height: 32 }} color="tertiary" />
-                            </IconButton>
-                            <Drawer
-                                anchor="right"
-                                open={drawerOpenProfile}
-                                onClose={handleDrawerProfileClose}
-                                PaperProps={{
-                                sx: { width: { xs: 220, sm: 280 } }
-                                }}
-                            >
-                                <List>
-                                {profileListItems.map((item2, index2) => (
-                                    <ListItem key={index2} disablePadding>
-                                    <ListItemButton
-                                        onClick={() => {
-                                        handleMainRedirect(item2.url);
-                                        handleDrawerProfileClose();
-                                        }}
-                                    >
-                                        <ListItemIcon>{item2.icon}</ListItemIcon>
-                                        <ListItemText primary={item2.text} />
-                                    </ListItemButton>
-                                    </ListItem>
-                                ))}
-                                </List>
-                            </Drawer>
-                        </>
+                            <>
+                                {/* You could add other quick access icons here if needed */}
+                                <IconButton
+                                    edge="end" // Better positioning for last item
+                                    onClick={handleDrawerProfileOpen}
+                                    aria-label="open profile menu"
+                                    sx={{ color: theme.palette.text.primary }} // Themed color
+                                >
+                                    {user.avatarUrl ? ( // Example: if user object has an avatar
+                                        <Avatar sx={{ width: 32, height: 32 }} src={user.avatarUrl} />
+                                    ) : (
+                                        <AccountCircleRoundedIcon sx={{ width: 32, height: 32 }} />
+                                    )}
+                                </IconButton>
+                            </>
                         ) : (
-                        <Stack
-                            direction="row"
-                            spacing={1}
-                            sx={{
-                            width: { xs: '100%', sm: 'auto' },
-                            justifyContent: { xs: 'center', sm: 'flex-end' },
-                            alignItems: 'center',
-                            height: 'auto',
-                            }}
-                        >
-                            <Button
-                                variant="contained"
-                                size="medium"
-                                onClick={handleSigninPage}
-                                fullWidth={isMobile}
-                                sx={{
-                                    fontSize: { xs: '0.9rem', sm: '0.95rem' },
-                                    height: 44, // Set explicit height
-                                    px: 2,
-                                    borderWidth: 2,
-                                    boxSizing: 'border-box'
-                                }}
-                            >
-                                Sign In
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                size="medium"
-                                onClick={handleSignupPage}
-                                fullWidth={isMobile}
-                                sx={{
-                                    fontSize: { xs: '0.9rem', sm: '0.95rem' },
-                                    height: 44, // Match height to Sign In
-                                    px: 2,
-                                    color: 'white',
-                                    borderColor: 'white',
-                                    borderWidth: 1, // Optional: make border more visible
-                                    boxSizing: 'border-box',
-                                    whiteSpace: 'nowrap' // Prevent text wrapping
-                                }}
-                            >
-                                New user
-                            </Button>
-                        </Stack>
+                            <Stack direction="row" spacing={{ xs: 1, sm: 1.5 }} alignItems="center">
+                                <Button
+                                    variant="outlined" // Outlined for secondary action
+                                    color="primary"    // Use theme's primary color
+                                    size={isMobile ? "small" : "medium"}
+                                    onClick={handleSigninPage}
+                                    sx={{
+                                        height: { xs: 36, sm: 40 },
+                                        // borderColor: theme.palette.primary.main, // Handled by color="primary"
+                                    }}
+                                >
+                                    Sign In
+                                </Button>
+                                <Button
+                                    variant="contained" // Contained for primary action
+                                    color="primary"     // Use theme's primary color
+                                    size={isMobile ? "small" : "medium"}
+                                    onClick={handleSignupPage}
+                                    sx={{
+                                        height: { xs: 36, sm: 40 },
+                                        // backgroundColor: theme.palette.secondary.main, // Or use secondary color
+                                        // '&:hover': {
+                                        //    backgroundColor: theme.palette.secondary.dark,
+                                        // }
+                                    }}
+                                >
+                                    Sign Up
+                                </Button>
+                            </Stack>
                         )}
                     </Box>
-                    
                 </Toolbar>
             </AppBar>
+
+            {/* Main Navigation Drawer */}
+            {user && (
+                <Drawer
+                    anchor="left"
+                    open={drawerOpenMain}
+                    onClose={handleDrawerClose}
+                    PaperProps={{
+                        sx: { backgroundColor: theme.palette.background.paper } // Themed drawer
+                    }}
+                >
+                    {renderDrawerList(mainListItems, handleDrawerClose)}
+                </Drawer>
+            )}
+
+            {/* Profile Actions Drawer */}
+            {user && (
+                <Drawer
+                    anchor="right"
+                    open={drawerOpenProfile}
+                    onClose={handleDrawerProfileClose}
+                    PaperProps={{
+                        sx: { backgroundColor: theme.palette.background.paper } // Themed drawer
+                    }}
+                >
+                    {renderDrawerList(profileListItems, handleDrawerProfileClose)}
+                </Drawer>
+            )}
         </Box>
     );
 }

@@ -1,223 +1,217 @@
-import '../layouts/css/Login.css';
-import '../layouts/css/Main.css';
+import React, { useEffect, useState } from 'react';
+// import '../layouts/css/Login.css'; // Try to move styles to sx or styled components
+// import '../layouts/css/Main.css';
 import { useNavigation } from '../context/NavigationContext';
-import React, { useEffect} from 'react';
 import { useUser } from '../context/UserContext';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
+
 import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper'; // For the form card
+import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Collapse from '@mui/material/Collapse';
-import CircularProgress from '@mui/material/CircularProgress';
-import { styled } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
+import Link from '@mui/material/Link'; // For "Forgot password" etc.
+import Grid from '@mui/material/Grid'; // For layout within the form
+
+import CloseIcon from '@mui/icons-material/Close';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Optional: For a header icon
+import Avatar from '@mui/material/Avatar'; // Optional: For a header icon
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  maxWidth: '400',
-  padding: theme.spacing(2),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '400px',
-    padding: theme.spacing(4),
-  },
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  minHeight: '70vh',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: theme.spacing(2),
-  width: '100vw',
-  boxSizing: 'border-box',
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  background:
-    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-}));
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: theme.spacing(2), // Use theme spacing for consistency
-}));
-
-const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
-  marginBottom: theme.spacing(2), // Use theme spacing for consistency
-}));
+// You can keep your styled components if you prefer, or move to sx
+// For this example, I'll primarily use sx for simplicity and to showcase theme integration.
 
 function Login() {
-  const { login, loading, error, user } = useUser();
-  const navigate =useNavigation();
-  const [open, setOpen] = React.useState(false);
-  const [userNameError, setUserNameError] = React.useState(false);
-  const [userNameErrorMessage, setUserNameErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
+    const { login, loading, error: apiError, user } = useUser(); // Renamed error to apiError to avoid conflict
+    const navigate = useNavigation();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
+    const [formErrors, setFormErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-  
-    const isValid = await validateInputs();
-    if (!isValid) return;
-  
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-  
-    await login(username, password);
-  
-    if (!error) {
-      navigate('/dashboard');
-    } else {
-      setOpen(true);
-    }
-  };
+    useEffect(() => {
+        if (user && !apiError) {
+            navigate('/dashboard');
+        }
+    }, [user, apiError, navigate]);
 
-  const validateInputs = async (e) => {
-    const username = document.getElementById('username');
-    const password = document.getElementById('password');
+    useEffect(() => {
+        if (apiError) {
+            setShowAlert(true);
+        }
+    }, [apiError]);
 
-    let isValid = true;
 
-    if (!username.value) {
-      setUserNameError(true);
-      setUserNameErrorMessage('Ingrese un usuario válido.');
-      isValid = false;
-    } else {
-      setUserNameError(false);
-      setUserNameErrorMessage('');
-    }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        // Clear specific error when user starts typing
+        if (formErrors[name]) {
+            setFormErrors(prev => ({ ...prev, [name]: '' }));
+        }
+        setShowAlert(false); // Hide general API error alert on new input
+    };
 
-    if (!password.value || password.value.length < 2) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Contraseña debe ser de al menos 6 caractéres.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
+    const validateInputs = () => {
+        let tempErrors = {};
+        let isValid = true;
 
-    return isValid;
+        if (!formData.username.trim()) {
+            tempErrors.username = 'Username is required.';
+            isValid = false;
+        }
+        if (!formData.password) {
+            tempErrors.password = 'Password is required.';
+            isValid = false;
+        } else if (formData.password.length < 4) { // Example: min length
+            tempErrors.password = 'Password must be at least 6 characters.';
+            isValid = false;
+        }
 
-  };
+        setFormErrors(tempErrors);
+        return isValid;
+    };
 
-  useEffect(() => {
-    if (user && !error) {
-      navigate('/dashboard');
-    }
-  }, [user, error, navigate]);
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if (!validateInputs()) return;
 
-  return (
-    <SignInContainer>
-      <Card variant="outlined">
+        await login(formData.username, formData.password);
+        // Alert visibility is handled by the useEffect watching apiError
+    };
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    return (
         <Box
-          component="form"
-          onSubmit={handleLogin}
-          noValidate
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            gap: 2,
-          }}
-        >
-          <FormControl sx={{ width: '100%' }}>
-            <Collapse in={open}>
-              <Alert severity="error" variant="filled" sx={{ mb: 2 }}
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => setOpen(false)}
-                    sx={{ mb: 1 }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-              >Login failed.</Alert>
-            </Collapse>
-            <StyledTextField
-              id="username"
-              name="username"
-              variant="outlined"
-              type="text"
-              label="Username"
-              error={userNameError}
-              helperText={userNameErrorMessage}
-              required
-              fullWidth
-            />
-            <StyledTextField
-              id="password"
-              name="password"
-              variant="outlined"
-              type={showPassword ? 'text' : 'password'}
-              label="Password"
-              error={passwordError}
-              helperText={passwordErrorMessage}
-              required
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            edge="end"
-                            tabIndex={-1}
-                        >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                    </InputAdornment>
-                ),
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 128px)', // Adjust based on header/footer
+                // A cleaner background:
+                background: (theme) => `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.background.default} 60%)`,
+                // Or a very simple one:
+                // backgroundColor: 'grey.100',
+                py: 4,
             }}
-            />
-            <Box sx={{ position: 'relative', mt: 2 }}>
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                disabled={loading}
-                fullWidth
-              >
-                Sign in
-              </Button>
-              {loading && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-12px',
-                    marginLeft: '-12px',
-                  }}
-                />
-              )}
-            </Box>
-          </FormControl>
-        </Box>
-      </Card>
-    </SignInContainer>
-  );
+        >
+            <Container component="main" maxWidth="xs">
+                <Paper
+                    elevation={6}
+                    sx={{
+                        padding: { xs: 3, sm: 4 },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        borderRadius: 2, // Softer corners
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+                        Sign In
+                    </Typography>
 
+                    {showAlert && apiError && (
+                        <Alert
+                            severity="error"
+                            variant="filled"
+                            sx={{ width: '100%', mb: 2 }}
+                            onClose={() => setShowAlert(false)} // Allow manual close
+                        >
+                            {apiError.message || 'Login failed. Please check your credentials.'}
+                        </Alert>
+                    )}
+
+                    <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1, width: '100%' }}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
+                            autoFocus
+                            value={formData.username}
+                            onChange={handleChange}
+                            error={!!formErrors.username}
+                            helperText={formErrors.username}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type={showPassword ? 'text' : 'password'}
+                            id="password"
+                            autoComplete="current-password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            error={!!formErrors.password}
+                            helperText={formErrors.password}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        {/* Optional: Remember me checkbox */}
+                        {/* <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Remember me"
+                        /> */}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            disabled={loading}
+                            sx={{ mt: 3, mb: 2, py: 1.5 }} // More padding for a modern feel
+                        >
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+                        </Button>
+                        <Grid container spacing={1}>
+                            <Grid item xs>
+                                <Link href="#" variant="body2" onClick={(e) => { e.preventDefault(); navigate('/forgot-password'); /* Implement this route */ }}>
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link component="button" variant="body2" onClick={() => navigate('/signup')}>
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Paper>
+            </Container>
+        </Box>
+    );
 }
 
 export default Login;
