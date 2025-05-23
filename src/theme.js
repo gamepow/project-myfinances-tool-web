@@ -7,6 +7,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#1A237E', // A deep indigo, good for finance apps
+      header: '#007acc', // A slightly lighter shade for headers
     },
     secondary: {
       main: '#FF6F00', // A vibrant orange for accents/buttons

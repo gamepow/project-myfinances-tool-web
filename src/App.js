@@ -36,8 +36,17 @@ function App() {
                   backgroundColor: theme.palette.background.default, // Optional: Explicitly set from theme
                 }}
               >
-                <Topbar />
-                <Box sx={{ flex: 1, p: { xs: 1, sm: 2, md: 3 } }}> {/* Added some padding to content area */}
+                <Box>
+                  <Topbar />
+                </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    p: { xs: 1, sm: 2, md: 3 },
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
                   <Routes>
                     <Route path="*" element={<Landingpage />} />
                     <Route path="/login" element={<Loginpage />} />
@@ -66,7 +75,9 @@ function App() {
                     {/* Add other routes as needed */}
                   </Routes>
                 </Box>
-                <Footer />
+                <Box>
+                  <Footer />
+                </Box>
               </Box>
             </NavigationProvider>
           </UserProvider>

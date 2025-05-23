@@ -85,15 +85,12 @@ function Dashboard() {
 
             try {
                 // Fetch expenses summary for the selected period
-                // IMPORTANT: Adjust your API endpoint to accept year and month query parameters
-                const expensesRes = await fetchWithAuth(`/api/private/transaction/summary/expenses/${user.id}`);
-                //await fetchWithAuth(`/api/private/transaction/summary/expenses/${user.id}?year=${year}&month=${month}`);
+                const expensesRes = await fetchWithAuth(`/api/private/transaction/summary/expenses/${user.id}/month?year=${year}&month=${month}`);
                 setTransactionExpensesSummary(expensesRes.data || []);
 
-                // If you also need income summary for this period:
-                 const incomeRes = await fetchWithAuth(`/api/private/transaction/summary/income/${user.id}`);
-                 //await fetchWithAuth(`/api/private/transaction/summary/income/${user.id}?year=${year}&month=${month}`);
-                 setTransactionIncomeSummary(incomeRes.data || []);
+                // Fetch income summary for the selected period
+                const incomeRes = await fetchWithAuth(`/api/private/transaction/summary/income/${user.id}/month?year=${year}&month=${month}`);
+                setTransactionIncomeSummary(incomeRes.data || []);
 
             } catch (error) {
                 console.error(`Error fetching transaction summaries for ${selectedDate.format('MMMM YYYY')}:`, error);
