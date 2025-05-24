@@ -14,7 +14,6 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText'; // For select errors
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
-import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';

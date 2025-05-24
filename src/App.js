@@ -11,6 +11,7 @@ import Loginpage from './pages/Login';
 import Signuppage from './pages/Signup';
 import ProtectedRoute from './layouts/ProtectedRoute';
 import Profilepage from './pages/Profile';
+import ChangePassword from './pages/ChangePassword';
 import Topbar from './pages/Topbar' // Assuming Topbar.js is in the pages folder
 import Footer from './pages/Footer'
 import { ThemeProvider } from '@mui/material/styles';
@@ -69,6 +70,14 @@ function App() {
                       {
                         <ProtectedRoute>
                           <Profilepage />
+                          <ChangePassword />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/change-password" element=
+                      {
+                        <ProtectedRoute>
+                          <ChangePassword />
                         </ProtectedRoute>
                       }
                     />
