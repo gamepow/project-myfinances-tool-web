@@ -96,6 +96,12 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
         setAlertState(prev => ({...prev, open: false}));
     };
 
+    const filteredCategories = useMemo(() => {
+        if (!formData.transactionType) return [];
+        return categories.filter(cat =>
+            (cat.categoryType || cat.category_type) === formData.transactionType
+        );
+    }, [categories, formData.transactionType]);
 
     const validateForm = () => {
         let tempErrors = {};
@@ -206,7 +212,7 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
                                 label="Category"
                                 onChange={handleChange}
                             >
-                                {categories.map((cat) => (
+                                {filteredCategories.map((cat) => (
                                     <MenuItem key={cat.categoryId} value={cat.categoryId}>
                                         {cat.categoryName}
                                     </MenuItem>

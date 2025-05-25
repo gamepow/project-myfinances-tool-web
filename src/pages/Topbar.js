@@ -15,9 +15,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'; // Updated Profile Icon
-import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded'; // Updated Password Icon
+import LockResetRoundedIcon from '@mui/icons-material/LockOpen'; // Updated Password Icon
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'; // Default if no avatar
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'; // Updated Logout Icon
+import BudgetIcon from '@mui/icons-material/MonetizationOn';
+import CategoryIcon from '@mui/icons-material/Category'; // Updated Category Icon
 
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -35,13 +37,15 @@ import List from '@mui/material/List';
 
 const mainListItems = [
     { text: 'Home', icon: <HomeRoundedIcon />, url: '/dashboard' },
+    { text: 'My Budget', icon: <BudgetIcon />, url: '/my-budget' },
     { text: 'Transactions', icon: <ReceiptRoundedIcon />, url: '/Transactions' }
 ];
 
 const profileListItems = [
     { text: 'Profile', icon: <PersonOutlineRoundedIcon />, url: '/profile' },
-    { text: 'Change Password', icon: <LockResetRoundedIcon />, url: '/change-password' },
-    { text: 'Log out', icon: <LogoutRoundedIcon />, url: '/logout' }
+    { text: 'Change Password', icon: <LockResetRoundedIcon />, url: '/change-password' },    
+    { text: 'My Categories', icon: <CategoryIcon />, url: '/my-categories' },
+    { text: 'Log out', icon: <LogoutRoundedIcon />, url: '/logout' },
 ];
 
 
