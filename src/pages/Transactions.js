@@ -116,110 +116,119 @@ export default function Transactions() {
   };
 
   return (
-    <Box sx={{ 
-        marginTop: 0,
-        display: 'flex',
-        flexDirection: 'column', // Add this to stack items vertically
-        width: '100%',
-        }}
-    >
-       {/* Alert for success or error messages */}
-        <Collapse in={alertState.open} sx={{ width: '100%', mb: 2 }}>
-            <Alert
-                severity={alertState.severity}
-                action={
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={() => setAlertState(prev => ({ ...prev, open: false }))}
-                    >
-                        <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                }
+    <Box sx={{
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+            py: { xs: 2, sm: 4 },
+        }}>
+            <Box
+                sx={{
+                    maxWidth: { xs: '100%', sm: 700, md: 1000 },
+                    mx: 'auto',
+                    mt: 4,
+                    px: { xs: 1, sm: 3, md: 4 },
+                    py: { xs: 2, sm: 3 },
+                    background: { xs: 'none', sm: '#fff' },
+                    borderRadius: { xs: 0, sm: 4 },
+                    boxShadow: { xs: 'none', sm: '0 8px 32px 0 rgba(31, 38, 135, 0.12)' },
+                    border: { sm: '1px solid #e3e8ee' },
+                }}
             >
-                {alertState.message}
-            </Alert>
-        </Collapse>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <DatePicker
-              label="Start Date"
-              value={startDate}
-              onChange={(newValue) => setStartDate(newValue)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <DatePicker
-              label="End Date"
-              value={endDate}
-              onChange={(newValue) => setEndDate(newValue)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <Button variant="contained" onClick={fetchFilteredTransactions}>
-              Filter
-            </Button>
-          </Box>
-        </LocalizationProvider>
-        {isMobile ? (
-        // Card view for mobile
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%'}}>
-          {Array.isArray(transactions) && transactions.map((tx) => (
-            <Card key={tx.transactionId} variant="outlined">
-              <CardContent>
-                <Typography variant="h6" gutterBottom sx={ { fontWeight: 'bold' }}>
-                  {tx.transactionType} - Category {tx.categoryId}
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: 800, mb: 3, textAlign: 'center', letterSpacing: 1, color: '#2d3a4a' }}>
+                    Transactions
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Description: {tx.description}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Amount: {formatCurrency(tx.amount, tx.currency)}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Date: {tx.transactionDate}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', mt: 2 }}>
-                  <IconButton aria-label="delete" onClick={() => handleDelete(tx.transactionId)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
+                {/* Alert for success or error messages */}
+                <Collapse in={alertState.open} sx={{ width: '100%', mb: 2 }}>
+                    <Alert
+                        severity={alertState.severity}
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => setAlertState(prev => ({ ...prev, open: false }))}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                    >
+                        {alertState.message}
+                    </Alert>
+                </Collapse>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                    <DatePicker
+                      label="Start Date"
+                      value={startDate}
+                      onChange={(newValue) => setStartDate(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <DatePicker
+                      label="End Date"
+                      value={endDate}
+                      onChange={(newValue) => setEndDate(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <Button variant="contained" onClick={fetchFilteredTransactions}>
+                      Filter
+                    </Button>
+                  </Box>
+                </LocalizationProvider>
+                <TableContainer component={Paper} sx={{
+                    maxWidth: '100%',
+                    overflowX: isMobile ? 'auto' : 'visible',
+                    boxShadow: { xs: 1, sm: 3 },
+                    borderRadius: 3,
+                    border: '1px solid #e3e8ee',
+                }}>
+                    <Table size={isMobile ? 'small' : 'medium'} sx={{
+                        '& thead th': {
+                            background: 'linear-gradient(90deg, #e0e7ef 0%, #f5f7fa 100%)',
+                            color: '#2d3a4a',
+                            fontWeight: 700,
+                            fontSize: '1.05rem',
+                        },
+                        '& tbody tr': {
+                            transition: 'background 0.2s',
+                        },
+                        '& tbody tr:hover': {
+                            background: '#f0f4fa',
+                        },
+                        '& td, & th': {
+                            borderBottom: '1px solid #e3e8ee',
+                        },
+                    }} aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <StyledTableCell>Type</StyledTableCell>
+                            <StyledTableCell>Account</StyledTableCell>
+                            <StyledTableCell>Category</StyledTableCell>
+                            <StyledTableCell>Description</StyledTableCell>
+                            <StyledTableCell align="right">Amount</StyledTableCell>
+                            <StyledTableCell>Date</StyledTableCell>
+                            <StyledTableCell></StyledTableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {Array.isArray(transactions) && transactions.map((tx) => (
+                            <TableRow key={tx.transactionId}>
+                              <TableCell>{tx.transactionType}</TableCell>
+                              <TableCell>{tx.accountName}</TableCell>
+                              <TableCell>{tx.categoryName}</TableCell>
+                              <TableCell>{tx.description}</TableCell>
+                              <TableCell align="right">{formatCurrency(tx.amount, tx.currency)}</TableCell>
+                              <TableCell>{tx.transactionDate}</TableCell>
+                              <TableCell>
+                                <IconButton aria-label="delete" onClick={() => handleDelete(tx.transactionId)}>
+                                  <DeleteIcon />
+                                </IconButton>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
         </Box>
-      ) : (
-        // Table view for desktop
-        <TableContainer component={Paper} sx={{ overflowX: 'auto'}}>
-            <Table stickyHeader sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
-                <TableHead>
-                <TableRow>
-                    <StyledTableCell>Transaction Type</StyledTableCell>
-                    <StyledTableCell align="right">Category</StyledTableCell>
-                    <StyledTableCell align="right">Description</StyledTableCell>
-                    <StyledTableCell align="right">Amount</StyledTableCell>
-                    <StyledTableCell align="right">Transaction Date</StyledTableCell>
-                    <StyledTableCell align="right"></StyledTableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Array.isArray(transactions) && transactions.map((tx) => (
-                    <TableRow key={tx.transactionId}>
-                      <TableCell>{tx.transactionType}</TableCell>
-                      <TableCell align="right">{tx.categoryName}</TableCell>
-                      <TableCell align="right">{tx.description}</TableCell>
-                      <TableCell align="right">{formatCurrency(tx.amount, tx.currency)}</TableCell>
-                      <TableCell align="right">{tx.transactionDate}</TableCell>
-                      <TableCell align="right">
-                        <IconButton aria-label="delete" onClick={() => handleDelete(tx.transactionId)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-        )}
-    </Box>
   );
 }

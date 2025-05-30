@@ -20,6 +20,7 @@ import theme from './theme';
 import Box from '@mui/material/Box';
 import MyBudget from './pages/MyBudget'; // Import MyBudget component
 import MyCategories from './pages/MyCategories'; // Import MyCategories component
+import MyAccounts from './pages/MyAccounts'; // Import MyAccounts component
 
 const basename = process.env.NODE_ENV === "production" ? "/project-myfinances-tool-web" : "";
 console.log("basename:" + basename);
@@ -87,10 +88,14 @@ function App() {
                         <ProtectedRoute>
                             <MyBudget />
                         </ProtectedRoute>
-                    } />
-                    <Route path="/my-categories" element={
+                    } />                    <Route path="/my-categories" element={
                         <ProtectedRoute>
                             <MyCategories />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/my-accounts" element={
+                        <ProtectedRoute>
+                            <MyAccounts />
                         </ProtectedRoute>
                     } />
                     {/* Add other routes as needed */}

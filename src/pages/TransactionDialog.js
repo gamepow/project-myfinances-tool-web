@@ -33,6 +33,7 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
     const initialFormState = useMemo(() => ({
         transactionType: '',
         categoryId: '',
+        accountId: '',
         amount: '',
         description: '',
         transactionDate: dayjs(), // dayjs() will be new each time this memo re-runs
@@ -45,6 +46,27 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [alertState, setAlertState] = useState({ open: false, severity: 'error', message: '' });
+    const [accounts, setAccounts] = useState([]);    useEffect(() => {
+        const fetchAccounts = async () => {
+            try {
+                const response = await fetchWithAuth(`/api/private/account/active/${user.id}`);
+                if (response && response.data) {
+                    // Ensure we're setting an array from the response data
+                    setAccounts(Array.isArray(response.data) ? response.data : []);
+                } else {
+                    setAccounts([]);
+                }
+            } catch (error) {
+                console.error('Error fetching accounts:', error);
+                setAlertState({ open: true, severity: 'error', message: 'Failed to load accounts' });
+                setAccounts([]); // Set empty array on error
+            }
+        };
+
+        if (open && user?.id) {
+            fetchAccounts();
+        }
+    }, [open, user?.id, fetchWithAuth]);
 
     const currencySymbol = user?.defaultCurrency || DEFAULT_CURRENCY_SYMBOL;
 
@@ -53,6 +75,7 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
         setFormData({
             transactionType: '',
             categoryId: '',
+            accountId: '',
             amount: '',
             description: '',
             transactionDate: dayjs(), // Explicitly set new dayjs() here
@@ -108,6 +131,7 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
         let isValid = true;
         if (!formData.transactionType) { tempErrors.transactionType = 'Required'; isValid = false; }
         if (!formData.categoryId) { tempErrors.categoryId = 'Required'; isValid = false; }
+        if (!formData.accountId) { tempErrors.accountId = 'Required'; isValid = false; }
         if (!formData.amount || parseFloat(formData.amount) <= 0) { tempErrors.amount = 'Must be a positive number'; isValid = false; }
         if (!formData.description.trim()) { tempErrors.description = 'Required'; isValid = false; }
         if (!formData.transactionDate || !formData.transactionDate.isValid()) { tempErrors.transactionDate = 'Valid date required'; isValid = false; }
@@ -200,6 +224,25 @@ function TransactionDialog({ open, onClose, categories, onTransactionSaved }) {
                                 <MenuItem value="expense">Expense</MenuItem>
                             </Select>
                             {formErrors.transactionType && <FormHelperText>{formErrors.transactionType}</FormHelperText>}
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth error={!!formErrors.accountId} required>
+                            <InputLabel id="account-label">Account</InputLabel>
+                            <Select
+                                name="accountId"
+                                labelId="account-label"
+                                value={formData.accountId}
+                                label="Account"
+                                onChange={handleChange}
+                            >
+                                {accounts.map((acc) => (
+                                    <MenuItem key={acc.accountId} value={acc.accountId}>
+                                        {acc.accountName} ({acc.accountType})
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {formErrors.accountId && <FormHelperText>{formErrors.accountId}</FormHelperText>}
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>

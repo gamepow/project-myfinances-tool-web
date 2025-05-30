@@ -20,6 +20,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'; // Updated Logout Icon
 import BudgetIcon from '@mui/icons-material/MonetizationOn';
 import CategoryIcon from '@mui/icons-material/Category'; // Updated Category Icon
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'; // Icon for accounts
 
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -38,6 +39,7 @@ import List from '@mui/material/List';
 const mainListItems = [
     { text: 'Home', icon: <HomeRoundedIcon />, url: '/dashboard' },
     { text: 'My Budget', icon: <BudgetIcon />, url: '/my-budget' },
+    { text: 'My Accounts', icon: <AccountBalanceWalletIcon />, url: '/my-accounts' },
     { text: 'Transactions', icon: <ReceiptRoundedIcon />, url: '/Transactions' }
 ];
 

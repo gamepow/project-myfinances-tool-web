@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Table, TableBody, TableContainer, TableHead, TableRow, IconButton, Select, MenuItem, FormControl, InputLabel, Paper } from '@mui/material';
+import { Box, TextField, Button, Typography, Table, TableBody, TableContainer, TableHead, TableRow, IconButton, Select, MenuItem, FormControl, InputLabel, Paper, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -15,6 +16,8 @@ function MyCategories() {
     const [error, setError] = useState(null);
     const [categoryType, setCategoryType] = useState('expense'); // Default to 'expense'
     const fetchWithAuth = useFetchWithAuth();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         // Fetch categories from the backend
@@ -97,63 +100,117 @@ function MyCategories() {
       }));
 
     return (
-        <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
-            <Typography variant="h5" gutterBottom>My Categories</Typography>
-            {error && <Typography color="error" gutterBottom>{error}</Typography>}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 4 }}>
-                <TextField
-                    label="Category Name"
-                    value={newCategory ?? ''}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    fullWidth
-                />
-                <FormControl fullWidth>
-                    <InputLabel id="category-type-label">Category Type</InputLabel>
-                    <Select
-                        labelId="category-type-label"
-                        value={categoryType ?? 'expense'}
-                        label="Category Type"
-                        onChange={(e) => setCategoryType(e.target.value)}
+        <Box sx={{
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+            py: { xs: 2, sm: 4 },
+        }}>
+            <Box
+                sx={{
+                    maxWidth: { xs: '100%', sm: 700, md: 900 },
+                    mx: 'auto',
+                    mt: 4,
+                    px: { xs: 1, sm: 3, md: 4 },
+                    py: { xs: 2, sm: 3 },
+                    background: { xs: 'none', sm: '#fff' },
+                    borderRadius: { xs: 0, sm: 4 },
+                    boxShadow: { xs: 'none', sm: '0 8px 32px 0 rgba(31, 38, 135, 0.12)' },
+                    border: { sm: '1px solid #e3e8ee' },
+                }}
+            >
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: 800, mb: 3, textAlign: 'center', letterSpacing: 1, color: '#2d3a4a' }}>
+                    My Categories
+                </Typography>
+                {error && <Typography color="error" gutterBottom>{error}</Typography>}
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: 2,
+                    mb: 4,
+                    alignItems: 'flex-end',
+                    justifyContent: isMobile ? 'flex-start' : 'center',
+                    background: '#f7fafc',
+                    borderRadius: 3,
+                    boxShadow: { sm: '0 2px 8px 0 rgba(31, 38, 135, 0.07)' },
+                    p: { xs: 2, sm: 3 },
+                    border: '1px solid #e3e8ee',
+                }}>
+                    <TextField
+                        label="Category Name"
+                        value={newCategory ?? ''}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        fullWidth
+                    />
+                    <FormControl fullWidth>
+                        <InputLabel id="category-type-label">Category Type</InputLabel>
+                        <Select
+                            labelId="category-type-label"
+                            value={categoryType ?? 'expense'}
+                            label="Category Type"
+                            onChange={(e) => setCategoryType(e.target.value)}
+                        >
+                            <MenuItem value="expense">Expense</MenuItem>
+                            <MenuItem value="income">Income</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={editingCategory ? handleUpdateCategory : handleAddCategory}
                     >
-                        <MenuItem value="expense">Expense</MenuItem>
-                        <MenuItem value="income">Income</MenuItem>
-                    </Select>
-                </FormControl>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={editingCategory ? handleUpdateCategory : handleAddCategory}
-                >
-                    {editingCategory ? 'Update' : 'Add'}
-                </Button>
-            </Box>
-            <TableContainer component={Paper} sx={{ maxWidth: '100%', margin: '0 auto' }}>
-                <Table sx={{ overflowX: 'auto' }}>
-                    <TableHead sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
-                        <TableRow>
-                            <StyledTableCell>Category Name</StyledTableCell>
-                            <StyledTableCell>Category Type</StyledTableCell>
-                            <StyledTableCell align="right">Actions</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {categories.map((category) => (
-                            <TableRow key={category.categoryId}>
-                                <TableCell>{category.categoryName}</TableCell>
-                                <TableCell>{category.categoryType}</TableCell>
-                                <TableCell align="right">
-                                    <IconButton onClick={() => handleEditCategory(category)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleDeleteCategory(category.categoryId)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </TableCell>
+                        {editingCategory ? 'Update' : 'Add'}
+                    </Button>
+                </Box>
+                <TableContainer component={Paper} sx={{
+                    maxWidth: '100%',
+                    overflowX: isMobile ? 'auto' : 'visible',
+                    boxShadow: { xs: 1, sm: 3 },
+                    borderRadius: 3,
+                    border: '1px solid #e3e8ee',
+                }}>
+                    <Table size={isMobile ? 'small' : 'medium'} sx={{
+                        '& thead th': {
+                            background: 'linear-gradient(90deg, #e0e7ef 0%, #f5f7fa 100%)',
+                            color: '#2d3a4a',
+                            fontWeight: 700,
+                            fontSize: '1.05rem',
+                        },
+                        '& tbody tr': {
+                            transition: 'background 0.2s',
+                        },
+                        '& tbody tr:hover': {
+                            background: '#f0f4fa',
+                        },
+                        '& td, & th': {
+                            borderBottom: '1px solid #e3e8ee',
+                        },
+                    }}>
+                        <TableHead sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
+                            <TableRow>
+                                <StyledTableCell>Category Name</StyledTableCell>
+                                <StyledTableCell>Category Type</StyledTableCell>
+                                <StyledTableCell align="right">Actions</StyledTableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {categories.map((category) => (
+                                <TableRow key={category.categoryId}>
+                                    <TableCell>{category.categoryName}</TableCell>
+                                    <TableCell>{category.categoryType}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton onClick={() => handleEditCategory(category)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleDeleteCategory(category.categoryId)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
         </Box>
     );
 }

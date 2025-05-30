@@ -122,121 +122,211 @@ function Dashboard() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' },
-                        justifyContent: 'space-between',
-                        alignItems: { xs: 'flex-start', sm: 'center' },
-                        mb: { xs: 3, md: 4 },
-                        gap: { xs: 2, sm: 0 },
-                    }}
-                >
-                    <Typography
-                        variant={isMobile ? "h5" : "h4"}
-                        component="h1"
-                        sx={{ fontWeight: 'bold' }}
+            <Box sx={{
+                minHeight: '100vh',
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                py: { xs: 2, sm: 4 },
+            }}>
+                <Container maxWidth="lg">
+                    <Box
+                        sx={{
+                            maxWidth: '100%',
+                            mx: 'auto',
+                            background: { xs: 'none', sm: '#fff' },
+                            borderRadius: { xs: 0, sm: 4 },
+                            boxShadow: { xs: 'none', sm: '0 8px 32px 0 rgba(31, 38, 135, 0.12)' },
+                            border: { sm: '1px solid #e3e8ee' },
+                            p: { xs: 2, sm: 3, md: 4 },
+                        }}
                     >
-                        Dashboard
-                    </Typography>
-                    <Button
-                        variant="contained"
-                        startIcon={<AddCardIcon />}
-                        onClick={handleAddTransaction}
-                        size={isMobile ? "medium" : "large"}
-                        sx={{ width: { xs: '100%', sm: 'auto' } }}
-                    >
-                        Add Transaction
-                    </Button>
-                </Box>
-
-                {/* Year and Month Selector */}
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-                    <Box sx={{ width: isMobile ? '100%' : 'auto', maxWidth: isMobile ? '100%' : 320 }}>
-                        <DatePicker
-                            label="Select Month and Year"
-                            views={['year', 'month']} // Allows selection of year and month
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                            format="MMMM YYYY" // Display format
-                            slotProps={{ // For MUI X Date Pickers v6+
-                                textField: {
-                                    fullWidth: true,
-                                    variant: 'outlined',
-                                    // helperText: "Select period for summaries" // Optional helper text
-                                }
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                justifyContent: 'space-between',
+                                alignItems: { xs: 'flex-start', sm: 'center' },
+                                mb: { xs: 3, md: 4 },
+                                gap: { xs: 2, sm: 0 },
                             }}
-                            // For older MUI X Date Pickers (v5), you might need:
-                            // inputFormat="MMMM YYYY"
-                            // renderInput={(params) => <TextField {...params} fullWidth variant="outlined" helperText="Select period" />}
-                        />
+                        >
+                            <Typography
+                                variant={isMobile ? "h5" : "h4"}
+                                component="h1"
+                                sx={{ 
+                                    fontWeight: 800,
+                                    letterSpacing: 1,
+                                    color: '#2d3a4a',
+                                    textAlign: { xs: 'center', sm: 'left' },
+                                    width: { xs: '100%', sm: 'auto' }
+                                }}
+                            >
+                                Dashboard
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                startIcon={<AddCardIcon />}
+                                onClick={handleAddTransaction}
+                                size={isMobile ? "medium" : "large"}
+                                sx={{
+                                    width: { xs: '100%', sm: 'auto' },
+                                    py: 1.5,
+                                    px: 3,
+                                    borderRadius: 2,
+                                    fontWeight: 600
+                                }}
+                            >
+                                Add Transaction
+                            </Button>
+                        </Box>
+
+                        {/* Year and Month Selector */}
+                        <Box sx={{ 
+                            display: 'flex',
+                            justifyContent: 'center',
+                            mb: 4,
+                            background: '#f7fafc',
+                            borderRadius: 3,
+                            p: { xs: 2, sm: 3 },
+                            border: '1px solid #e3e8ee'
+                        }}>
+                            <Box sx={{ width: isMobile ? '100%' : 'auto', maxWidth: isMobile ? '100%' : 320 }}>
+                                <DatePicker
+                                    label="Select Month and Year"
+                                    views={['year', 'month']}
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    format="MMMM YYYY"
+                                    slotProps={{
+                                        textField: {
+                                            fullWidth: true,
+                                            variant: 'outlined'
+                                        }
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                textAlign: 'center',
+                                mb: { xs: 3, md: 4 },
+                                color: '#2d3a4a',
+                                fontWeight: 700,
+                                letterSpacing: 0.5
+                            }}
+                        >
+                            {displayMonthYear} Overview
+                        </Typography>
+
+                        {/* Charts Section */}
+                        <Grid container spacing={3} justifyContent="center">
+                            <Grid item xs={12} md={6}>
+                                <Paper sx={{
+                                    p: 3,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: 'auto',
+                                    overflowX: 'auto',
+                                    borderRadius: 3,
+                                    boxShadow: '0 4px 20px 0 rgba(31, 38, 135, 0.07)',
+                                    background: '#fff',
+                                    border: '1px solid #e3e8ee'
+                                }}>
+                                    <Typography variant="h6" gutterBottom component="div" sx={{ 
+                                        textAlign: 'center',
+                                        fontWeight: 600,
+                                        color: '#2d3a4a',
+                                        mb: 2
+                                    }}>
+                                        Expenses by Category
+                                    </Typography>
+                                    {loadingCharts ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: chartHeight }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : chartError ? (
+                                        <Alert severity="error" sx={{ m: 2, minHeight: chartHeight, display: 'flex', alignItems: 'center' }}>
+                                            {chartError}
+                                        </Alert>
+                                    ) : expenseChartData.length > 0 ? (
+                                        <BarChartComponent data={expenseChartData} height={chartHeight} />
+                                    ) : (
+                                        <Typography sx={{ 
+                                            textAlign: 'center',
+                                            py: 4,
+                                            minHeight: chartHeight,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: 'text.secondary',
+                                            fontStyle: 'italic'
+                                        }}>
+                                            No expense data found for {displayMonthYear}.
+                                        </Typography>
+                                    )}
+                                </Paper>
+                            </Grid>
+                            
+                            <Grid item xs={12} md={6}>
+                                <Paper sx={{
+                                    p: 3,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: 'auto',
+                                    overflowX: 'auto',
+                                    borderRadius: 3,
+                                    boxShadow: '0 4px 20px 0 rgba(31, 38, 135, 0.07)',
+                                    background: '#fff',
+                                    border: '1px solid #e3e8ee'
+                                }}>
+                                    <Typography variant="h6" gutterBottom component="div" sx={{ 
+                                        textAlign: 'center',
+                                        fontWeight: 600,
+                                        color: '#2d3a4a',
+                                        mb: 2
+                                    }}>
+                                        Income by Category
+                                    </Typography>
+                                    {loadingCharts ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: chartHeight }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : chartError ? (
+                                        <Alert severity="error" sx={{ m: 2, minHeight: chartHeight, display: 'flex', alignItems: 'center' }}>
+                                            {chartError}
+                                        </Alert>
+                                    ) : incomeChartData.length > 0 ? (
+                                        <BarChartComponent data={incomeChartData} height={chartHeight} />
+                                    ) : (
+                                        <Typography sx={{ 
+                                            textAlign: 'center',
+                                            py: 4,
+                                            minHeight: chartHeight,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: 'text.secondary',
+                                            fontStyle: 'italic'
+                                        }}>
+                                            No income data found for {displayMonthYear}.
+                                        </Typography>
+                                    )}
+                                </Paper>
+                            </Grid>
+                        </Grid>
+
+                        {categories.length > 0 && (
+                            <TransactionDialog
+                                open={openDialog}
+                                onClose={handleCloseDialog}
+                                categories={categories}
+                                onTransactionSaved={handleTransactionSaved}
+                            />
+                        )}
                     </Box>
-                </Box>
-
-                <Typography
-                    variant={isMobile ? "h5" : "h4"}
-                    sx={{ textAlign: 'center', mb: { xs: 3, md: 4 }, color: 'text.secondary' }}
-                >
-                    {displayMonthYear} Overview
-                </Typography>
-
-                {/* Charts Section */}
-                <Grid container spacing={3} justifyContent="center">
-                    <Grid item xs={12} md={8} lg={7}> {/* You might want to adjust lg for bar chart width */}
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 'auto', overflowX: 'auto' }}> {/* Added overflowX for safety on small screens */}
-                            <Typography variant="h6" gutterBottom component="div" sx={{ textAlign: 'center' }}>
-                                Expenses by Category
-                            </Typography>
-                            {loadingCharts ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: chartHeight }}>
-                                    <CircularProgress />
-                                </Box>
-                            ) : chartError ? (
-                                <Alert severity="error" sx={{ m: 2, minHeight: chartHeight, display: 'flex', alignItems: 'center' }}>{chartError}</Alert>
-                            ) : expenseChartData.length > 0 ? (
-                                // Use the new BarChartComponent
-                                <BarChartComponent data={expenseChartData} height={chartHeight} />
-                            ) : (
-                                <Typography sx={{ textAlign: 'center', py: 4, minHeight: chartHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    No expense data found for {displayMonthYear}.
-                                </Typography>
-                            )}
-                        </Paper>
-                    </Grid>
-                    {/* You can add another Grid item here for an income chart or other summaries */}
-                    <Grid item xs={12} md={8} lg={7}> {/* You might want to adjust lg for bar chart width */}
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 'auto', overflowX: 'auto' }}> {/* Added overflowX for safety on small screens */}
-                            <Typography variant="h6" gutterBottom component="div" sx={{ textAlign: 'center' }}>
-                                Income by Category
-                            </Typography>
-                            {loadingCharts ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: chartHeight }}>
-                                    <CircularProgress />
-                                </Box>
-                            ) : chartError ? (
-                                <Alert severity="error" sx={{ m: 2, minHeight: chartHeight, display: 'flex', alignItems: 'center' }}>{chartError}</Alert>
-                            ) : incomeChartData.length > 0 ? (
-                                // Use the new BarChartComponent
-                                <BarChartComponent data={incomeChartData} height={chartHeight} />
-                            ) : (
-                                <Typography sx={{ textAlign: 'center', py: 4, minHeight: chartHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    No income data found for {displayMonthYear}.
-                                </Typography>
-                            )}
-                        </Paper>
-                    </Grid>
-                </Grid>
-
-                {categories.length > 0 && (
-                    <TransactionDialog
-                        open={openDialog}
-                        onClose={handleCloseDialog}
-                        categories={categories}
-                        onTransactionSaved={handleTransactionSaved}
-                    />
-                )}
-            </Container>
+                </Container>
+            </Box>
         </LocalizationProvider>
     );
 }
